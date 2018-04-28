@@ -10,8 +10,12 @@ import GLKit
 
 class GameView: GLKViewController {
     
+    // 0 can be an error state
+    private var _program: GLuint = 0
     
-    private var _translate: Float = 0.0
+    // cpu side
+    private var _translateX: Float = 0.0
+    private var _translateY: Float = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,23 +91,23 @@ class GameView: GLKViewController {
         }
         
         // link shaders into program
-        let program: GLuint = glCreateProgram()
-        glAttachShader(program, vertexShader)
-        glAttachShader(program, fragmentShader)
-        glBindAttribLocation(program, 0, "position")
-        glLinkProgram(program)
+        _program = glCreateProgram()
+        glAttachShader(_program, vertexShader)
+        glAttachShader(_program, fragmentShader)
+        glBindAttribLocation(_program, 0, "position")
+        glLinkProgram(_program)
         var programLinkStatus: GLint = GL_FALSE
-        glGetProgramiv(program, GLenum(GL_LINK_STATUS), &programLinkStatus)
+        glGetProgramiv(_program, GLenum(GL_LINK_STATUS), &programLinkStatus)
         if (programLinkStatus == GL_FALSE){
             var programLogLength: GLint = 0
-            glGetProgramiv(program, GLenum(GL_INFO_LOG_LENGTH), &programLogLength)
+            glGetProgramiv(_program, GLenum(GL_INFO_LOG_LENGTH), &programLogLength)
             let programLog = UnsafeMutablePointer<GLchar>.allocate(capacity: Int(programLogLength))
-            glGetProgramInfoLog(program, programLogLength, nil, programLog)
+            glGetProgramInfoLog(_program, programLogLength, nil, programLog)
             let programLogString: NSString = NSString(utf8String: programLog)!
             print("Program link failed! Error: \(programLogString)")
         }
         
-        glUseProgram(program)
+        glUseProgram(_program)
         glEnableVertexAttribArray(0)
         
     }
@@ -117,19 +121,21 @@ class GameView: GLKViewController {
     override func glkView(_ view: GLKView, drawIn rect: CGRect) {
         glClear(GLbitfield(bitPattern: GL_COLOR_BUFFER_BIT))
         
-        _translate += 0.001
-        let triangle: [Float] = [
-            -0.125, -0.125 + _translate,
-            0.125, -0.125 + _translate,
-            0.0, 0.0 + _translate
-            
-        ]
         
+        let triangle: [Float] =
+            [
+            -0.125, -0.125,
+            0.125, -0.125,
+            0.0, 0.0]
+        
+        _translateX += 0.001
+        _translateY += 0.001
         // draw a tringle
         
         // param2 -> 2 - dimentions
         // stride -> how many bytes to skip (0 is tightly packed = size 2 * int = 8)
         glVertexAttribPointer(0, 2, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, triangle)
+        glUniform2f(glGetUniformLocation(_program, "translate"), _translateX, _translateY)
         glDrawArrays(GLenum(GL_TRIANGLES), 0, 3)
         
     }
