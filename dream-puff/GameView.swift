@@ -10,6 +10,9 @@ import GLKit
 
 class GameView: GLKViewController {
     
+    
+    private var _translate: Float = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,23 +26,24 @@ class GameView: GLKViewController {
     }
     
     private func setup() {
-        glClearColor(0.0, 1.0, 0.0, 1.0)
+        glClearColor(0.737254902, 0.9843137255, 1.0, 1.0);
+        
         
         let vertextShaderSource: NSString = """
         attribute vec2 position;
+        uniform vec2 translate;
         void main()
         {
-            gl_Position = vec4(position.x, position.y, 0.0, 1.0);
+            gl_Position = vec4(position.x + translate.x, position.y + translate.y, 0.0, 1.0);
         }
         """
         
         let fragmentShaderSource: NSString = """
         void main()
         {
-            gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+            gl_FragColor = vec4(1.0, 0.737254902, 0.8509803922, 1.0);
         }
         """
-        
         
         // create and compile a vertex shader
         let vertexShader: GLuint = glCreateShader(GLenum(GL_VERTEX_SHADER))
@@ -113,10 +117,11 @@ class GameView: GLKViewController {
     override func glkView(_ view: GLKView, drawIn rect: CGRect) {
         glClear(GLbitfield(bitPattern: GL_COLOR_BUFFER_BIT))
         
+        _translate += 0.001
         let triangle: [Float] = [
-            0.0, 0.0,
-            1.0, 0.0,
-            0.0, 1.0,
+            -0.125, -0.125 + _translate,
+            0.125, -0.125 + _translate,
+            0.0, 0.0 + _translate
             
         ]
         
