@@ -123,11 +123,12 @@ class GameView: GLKViewController {
         glClear(GLbitfield(bitPattern: GL_COLOR_BUFFER_BIT))
         
         
-        let triangle: [Float] =
+        let quad: [Float] =
             [
-            -0.125, -0.125,
-            0.125, -0.125,
-            0.0, 0.0]
+            -0.5, -0.5,
+            0.5, -0.5,
+            -0.5, 0.5,
+            0.5, 0.5]
         
         _translateX += 0.001
         _translateY -= 0.005
@@ -135,17 +136,17 @@ class GameView: GLKViewController {
         
         // param2 -> 2 - dimentions
         // stride -> how many bytes to skip (0 is tightly packed = size 2 * int = 8)
-        glVertexAttribPointer(0, 2, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, triangle)
+        glVertexAttribPointer(0, 2, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, quad)
         // triagle 1
         glUniform2f(glGetUniformLocation(_program, "translate"), _translateX, _translateY)
         glUniform4f(glGetUniformLocation(_program, "color"), 1.0, 0.0, 0.0, 1.0)
-        glDrawArrays(GLenum(GL_TRIANGLES), 0, 3)
+        glDrawArrays(GLenum(GL_TRIANGLE_STRIP), 0, 4)
 
         
         // triagle 2
         glUniform2f(glGetUniformLocation(_program, "translate"), -_translateX, -_translateY)
         glUniform4f(glGetUniformLocation(_program, "color"), 0.0, 0.0, 1.0, 1.0)
-        glDrawArrays(GLenum(GL_TRIANGLES), 0, 3)
+        glDrawArrays(GLenum(GL_TRIANGLE_STRIP), 0, 4)
         
     }
 }
