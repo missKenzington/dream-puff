@@ -38,5 +38,6 @@ class MainMenuViewController: UIViewController, MainMenuDelegate {
     
     func newGame() {
         print("NEW GAME")
+        self.navigationController?.pushViewController(GameView(), animated: true)
     }
 }

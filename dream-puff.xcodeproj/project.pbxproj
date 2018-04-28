@@ -18,6 +18,7 @@
 		4F81437F209458680004F566 /* sky.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F81437E209458680004F566 /* sky.jpg */; };
 		4F814381209458F50004F566 /* unicorn-sky.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F814380209458F40004F566 /* unicorn-sky.jpg */; };
 		4F81438320945E390004F566 /* whale-unicorn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F81438220945E390004F566 /* whale-unicorn.png */; };
+		4F814385209463BA0004F566 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F814384209463BA0004F566 /* GameView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		4F81437E209458680004F566 /* sky.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sky.jpg; sourceTree = "<group>"; };
 		4F814380209458F40004F566 /* unicorn-sky.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "unicorn-sky.jpg"; sourceTree = "<group>"; };
 		4F81438220945E390004F566 /* whale-unicorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whale-unicorn.png"; sourceTree = "<group>"; };
+		4F814384209463BA0004F566 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				4F71D05B209452BE00A321AB /* AppDelegate.swift */,
 				4F71D05D209452BE00A321AB /* MainMenuViewController.swift */,
 				4F81437A209455A00004F566 /* MainMenuView.swift */,
+				4F814384209463BA0004F566 /* GameView.swift */,
 				4F71D05F209452BE00A321AB /* Main.storyboard */,
 				4F71D062209452BE00A321AB /* Assets.xcassets */,
 				4F71D06D209452D700A321AB /* unicorn-splash.png */,
@@ -160,6 +163,7 @@
 			files = (
 				4F81437B209455A00004F566 /* MainMenuView.swift in Sources */,
 				4F71D05E209452BE00A321AB /* MainMenuViewController.swift in Sources */,
+				4F814385209463BA0004F566 /* GameView.swift in Sources */,
 				4F71D05C209452BE00A321AB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
