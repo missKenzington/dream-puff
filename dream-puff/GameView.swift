@@ -25,13 +25,20 @@ class GameView: GLKViewController {
     private func setup() {
         glClearColor(0.0, 1.0, 0.0, 1.0)
         
-        let vertextShaderSource: NSString = NSString(string: "void main() {\n" +
-        "gl_Position = vec4(1.0, 1.0, 0.0, 1.0);\n" +
-        "}\n")
+        let vertextShaderSource: NSString = """
+        attribute vec2 position;
+        void main()
+        {
+            gl_Position = vec4(position.x, position.y, 0.0, 1.0);
+        }
+        """
         
-        let fragmentShaderSource: NSString = NSString(string: "void main() {\n" +
-            "gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\n" +
-            "}\n")
+        let fragmentShaderSource: NSString = """
+        void main()
+        {
+            gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+        }
+        """
         
         
         // create and compile a vertex shader
@@ -79,6 +86,7 @@ class GameView: GLKViewController {
         let program: GLuint = glCreateProgram()
         glAttachShader(program, vertexShader)
         glAttachShader(program, fragmentShader)
+        glBindAttribLocation(program, 0, "position")
         glLinkProgram(program)
         var programLinkStatus: GLint = GL_FALSE
         glGetProgramiv(program, GLenum(GL_LINK_STATUS), &programLinkStatus)
@@ -92,6 +100,7 @@ class GameView: GLKViewController {
         }
         
         glUseProgram(program)
+        glEnableVertexAttribArray(0)
         
     }
     
@@ -104,6 +113,19 @@ class GameView: GLKViewController {
     override func glkView(_ view: GLKView, drawIn rect: CGRect) {
         glClear(GLbitfield(bitPattern: GL_COLOR_BUFFER_BIT))
         
+        let triangle: [Float] = [
+            0.0, 0.0,
+            1.0, 0.0,
+            0.0, 1.0,
+            
+        ]
+        
         // draw a tringle
+        
+        // param2 -> 2 - dimentions
+        // stride -> how many bytes to skip (0 is tightly packed = size 2 * int = 8)
+        glVertexAttribPointer(0, 2, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, triangle)
+        glDrawArrays(GLenum(GL_TRIANGLES), 0, 3)
+        
     }
 }
