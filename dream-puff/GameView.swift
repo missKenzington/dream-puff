@@ -16,6 +16,16 @@ class GameView: GLKViewController {
     // cpu side
     private var _translateX: Float = 0.0
     private var _translateY: Float = 0.0
+    private var _scaleX: Float = 0.5
+    private var _scaleY: Float = 0.3
+    
+    private let _quad: [Float] =
+    [
+        -0.5, -0.5,
+        0.5, -0.5,
+        -0.5, 0.5,
+        0.5, 0.5
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,9 +46,10 @@ class GameView: GLKViewController {
         let vertextShaderSource: NSString = """
         attribute vec2 position;
         uniform vec2 translate;
+        uniform vec2 scale;
         void main()
         {
-            gl_Position = vec4(position.x + translate.x, position.y + translate.y, 0.0, 1.0);
+            gl_Position = vec4(position.x * scale.x + translate.x, position.y * scale.y + translate.y, 0.0, 1.0);
         }
         """
         
@@ -111,6 +122,10 @@ class GameView: GLKViewController {
         glUseProgram(_program)
         glEnableVertexAttribArray(0)
         
+        
+        // param2 -> 2 - dimentions
+        // stride -> how many bytes to skip (0 is tightly packed = size 2 * int = 8)
+        glVertexAttribPointer(0, 2, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, _quad)
     }
     
     // if defined it will call, run before the display, update game model
@@ -122,27 +137,17 @@ class GameView: GLKViewController {
     override func glkView(_ view: GLKView, drawIn rect: CGRect) {
         glClear(GLbitfield(bitPattern: GL_COLOR_BUFFER_BIT))
         
-        
-        let quad: [Float] =
-            [
-            -0.5, -0.5,
-            0.5, -0.5,
-            -0.5, 0.5,
-            0.5, 0.5]
-        
         _translateX += 0.001
         _translateY -= 0.005
+        
         // draw a tringle
         
-        // param2 -> 2 - dimentions
-        // stride -> how many bytes to skip (0 is tightly packed = size 2 * int = 8)
-        glVertexAttribPointer(0, 2, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, quad)
         // triagle 1
         glUniform2f(glGetUniformLocation(_program, "translate"), _translateX, _translateY)
         glUniform4f(glGetUniformLocation(_program, "color"), 1.0, 0.0, 0.0, 1.0)
+        glUniform2f(glGetUniformLocation(_program, "scale"), _scaleX, _scaleY)
         glDrawArrays(GLenum(GL_TRIANGLE_STRIP), 0, 4)
 
-        
         // triagle 2
         glUniform2f(glGetUniformLocation(_program, "translate"), -_translateX, -_translateY)
         glUniform4f(glGetUniformLocation(_program, "color"), 0.0, 0.0, 1.0, 1.0)
