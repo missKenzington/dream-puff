@@ -182,11 +182,76 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         super.touchesBegan(touches, with: event)
         
         let touch = touches.first! as UITouch
-        // 200, 400 is the center of the screen
-        print(self.view.bounds.height)
-        print("x")
-        print(self.view.bounds.width)
-        print(touch)
+        let point = touch.location(in: self.view)
+        var glkX: Float = 0.0
+        var glkY: Float = 0.0
+        
+        if (point.x > self.view.center.x){
+            glkX = Float((point.x - self.view.center.x)/(self.view.bounds.maxX - self.view.center.x))
+        } else {
+            glkX = 1.0 - Float((point.x)/(self.view.center.x))
+            glkX *= -1
+        }
+        glkX *= 0.5
+        
+        if (point.y < self.view.center.y){
+            glkY = 1.0 - Float((point.y)/(self.view.center.y))
+        } else {
+            glkY = Float((point.y - self.view.center.x)/(self.view.bounds.maxY - self.view.center.y))
+            glkY = 1.0 - Float((point.y)/(self.view.center.y))
+        }
+        
+        print(glkX)
+        print(glkY)
+        
+        var absX = abs(glkX - _rightArrowSprite.position.x)
+        var absY = abs(glkY - _rightArrowSprite.position.y)
+        var xSquared = absX * absX
+        var ySquared = absY * absY
+        var radius = (_rightArrowSprite.width * 0.5) * (_rightArrowSprite.width * 0.5)
+        if ((xSquared + ySquared < radius) && glkX >= 0.0) {
+            _playerSprite.position.x += 0.05
+            _playerSprite.texturePosition.y = 0.25
+        }
+        
+        absX = abs(glkX - _leftArrowSprite.position.x)
+        absY = abs(glkY - _leftArrowSprite.position.y)
+        xSquared = absX * absX
+        ySquared = absY * absY
+        radius = (_leftArrowSprite.width * 0.5) * (_leftArrowSprite.width * 0.5)
+        
+        if ((xSquared + ySquared < radius) && glkX < 0.0) {
+            _playerSprite.position.x -= 0.05
+            _playerSprite.texturePosition.y = 0.75
+        }
+        
+        absX = abs(glkX - _upArrowSprite.position.x)
+        absY = abs(glkY - _upArrowSprite.position.y)
+        xSquared = absX * absX
+        ySquared = absY * absY
+        radius = (_upArrowSprite.width * 0.5) * (_upArrowSprite.width * 0.5)
+        
+        if ((xSquared + ySquared < radius)) {
+            _playerSprite.position.y += 0.05
+            _playerSprite.texturePosition.y = 0.0
+        }
+        
+        absX = abs(glkX - _downArrowSprite.position.x)
+        absY = abs(glkY - _downArrowSprite.position.y)
+        xSquared = absX * absX
+        ySquared = absY * absY
+        radius = (_downArrowSprite.width * 0.5) * (_downArrowSprite.width * 0.5)
+        
+        if ((xSquared + ySquared < radius)) {
+            _playerSprite.position.y -= 0.05
+            _playerSprite.texturePosition.y = 0.5
+        }
+        
+        
+        
+//        print(self.view.center.x - point.x)
+//        print("x")
+//        print(self.view.center.y - point.y)
     }
     
     override func viewWillAppear(_ animated: Bool) {
