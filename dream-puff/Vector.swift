@@ -10,6 +10,9 @@ import Foundation
 
 class Vector {
     
+    var x: Float = 0.0
+    var y: Float = 0.0
+    
     init() {
         
     }

@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F67900220995343003E4E2C /* mars.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F67900120995342003E4E2C /* mars.png */; };
+		4F6BAF6E20996A650088FD95 /* cat_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F6BAF6D20996A650088FD95 /* cat_black.png */; };
+		4F6BAF7D20997B070088FD95 /* unicorn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F6BAF7C20997B070088FD95 /* unicorn.png */; };
 		4F71D05C209452BE00A321AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D05B209452BE00A321AB /* AppDelegate.swift */; };
 		4F71D05E209452BE00A321AB /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D05D209452BE00A321AB /* MainMenuViewController.swift */; };
-		4F71D061209452BE00A321AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D05F209452BE00A321AB /* Main.storyboard */; };
 		4F71D063209452BE00A321AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D062209452BE00A321AB /* Assets.xcassets */; };
 		4F71D066209452BE00A321AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D064209452BE00A321AB /* LaunchScreen.storyboard */; };
 		4F71D06E209452D700A321AB /* unicorn-splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D06D209452D700A321AB /* unicorn-splash.png */; };
@@ -24,10 +26,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F67900120995342003E4E2C /* mars.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mars.png; sourceTree = "<group>"; };
+		4F6BAF6D20996A650088FD95 /* cat_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cat_black.png; sourceTree = "<group>"; };
+		4F6BAF7C20997B070088FD95 /* unicorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unicorn.png; sourceTree = "<group>"; };
 		4F71D058209452BE00A321AB /* dream-puff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "dream-puff.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F71D05B209452BE00A321AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4F71D05D209452BE00A321AB /* MainMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
-		4F71D060209452BE00A321AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4F71D062209452BE00A321AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F71D065209452BE00A321AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4F71D067209452BE00A321AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -79,12 +83,14 @@
 				4F814384209463BA0004F566 /* GameView.swift */,
 				4F814386209489A20004F566 /* Sprite.swift */,
 				4F814388209489CD0004F566 /* Vector.swift */,
-				4F71D05F209452BE00A321AB /* Main.storyboard */,
 				4F71D062209452BE00A321AB /* Assets.xcassets */,
+				4F6BAF7C20997B070088FD95 /* unicorn.png */,
 				4F71D06D209452D700A321AB /* unicorn-splash.png */,
+				4F6BAF6D20996A650088FD95 /* cat_black.png */,
 				4F814380209458F40004F566 /* unicorn-sky.jpg */,
 				4F81438220945E390004F566 /* whale-unicorn.png */,
 				4F81437E209458680004F566 /* sky.jpg */,
+				4F67900120995342003E4E2C /* mars.png */,
 				4F71D064209452BE00A321AB /* LaunchScreen.storyboard */,
 				4F71D067209452BE00A321AB /* Info.plist */,
 			);
@@ -154,8 +160,10 @@
 				4F71D066209452BE00A321AB /* LaunchScreen.storyboard in Resources */,
 				4F814381209458F50004F566 /* unicorn-sky.jpg in Resources */,
 				4F71D063209452BE00A321AB /* Assets.xcassets in Resources */,
+				4F6BAF6E20996A650088FD95 /* cat_black.png in Resources */,
 				4F81437F209458680004F566 /* sky.jpg in Resources */,
-				4F71D061209452BE00A321AB /* Main.storyboard in Resources */,
+				4F67900220995343003E4E2C /* mars.png in Resources */,
+				4F6BAF7D20997B070088FD95 /* unicorn.png in Resources */,
 				4F71D06E209452D700A321AB /* unicorn-splash.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -179,14 +187,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		4F71D05F209452BE00A321AB /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4F71D060209452BE00A321AB /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		4F71D064209452BE00A321AB /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

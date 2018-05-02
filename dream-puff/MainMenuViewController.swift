@@ -1,6 +1,6 @@
 //
 //  MainMenuViewController.swift
-//  puff-the-magic-unicorn
+//  dream-puff
 //
 //  Created by Makenzie Elliott on 4/21/18.
 //  Copyright © 2018 Makenzie Elliott. All rights reserved.
