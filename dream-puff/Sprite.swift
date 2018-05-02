@@ -37,17 +37,18 @@ class Sprite {
         attribute vec2 textureCoordinate;
         uniform vec2 translate;
         uniform vec2 scale;
+        uniform vec2 translateTextureCoordinate;
+        uniform vec2 scaleTextureCoordinate;
         varying vec2 textureCoordinateInterpolated;
 
         void main()
         {
             gl_Position = vec4(position.x * scale.x + translate.x, position.y * scale.y + translate.y, 0.0, 1.0);
-            textureCoordinateInterpolated = textureCoordinate;
+            textureCoordinateInterpolated = vec2(textureCoordinate.x + translateTextureCoordinate.x, textureCoordinate.y + translateTextureCoordinate.y);
         }
         """
         
         let fragmentShaderSource: NSString = """
-        uniform highp vec4 color;
         uniform sampler2D textureUnit;
         varying highp vec2 textureCoordinateInterpolated;
 
@@ -118,24 +119,25 @@ class Sprite {
         }
         
         // Redifine OpenGL defaults
+        glEnable(GLenum(GL_BLEND))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
         glUseProgram(_program)
         glEnableVertexAttribArray(0)
         // param2 -> 2 - dimentions
         // stride -> how many bytes to skip (0 is tightly packed = size 2 * int = 8)
         glVertexAttribPointer(0, 2, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, _quad)
-        
         glEnableVertexAttribArray(1)
-        
         glVertexAttribPointer(1 , 2, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, _quadTextureCoordinates)
         
-        glEnable(GLenum(GL_BLEND))
-        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
+        
     }
     
     
     
     // --------------------------- members --------------------------- //
     var position: Vector = Vector()
+    var texturePosition: Vector = Vector()
+    var textureScale: Vector = Vector()
     var width: Float = 1.0
     var height: Float = 1.0
     var texture: GLuint = 0
@@ -147,6 +149,8 @@ class Sprite {
             Sprite.setup()
         }
         glUniform2f(glGetUniformLocation(Sprite._program, "translate"), position.x, position.y)
+        glUniform2f(glGetUniformLocation(Sprite._program, "translateTextureCoordinate"), texturePosition.x, texturePosition.y)
+        glUniform2f(glGetUniformLocation(Sprite._program, "scaleTextureCoordinate"), 1.0, 1.0)
         glUniform1i(glGetUniformLocation(Sprite._program, "textureUnit"), 0)
         glUniform2f(glGetUniformLocation(Sprite._program, "scale"), width, height)
         glBindTexture(GLenum(GL_TEXTURE_2D), texture)

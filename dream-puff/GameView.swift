@@ -16,6 +16,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     private var _enemyTexture: GLKTextureInfo? = nil
     private var _lastUpdate: NSDate = NSDate()
     private var _animation = 0.0
+    private var _animationSwitch = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,8 +52,11 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         _enemySprite.texture = _enemyTexture!.name
         _enemySprite.width = 0.25
         _enemySprite.height = 0.25
-        _enemySprite.position.x = -0.5
+        _enemySprite.position.x = -0.4
         _enemySprite.position.y = 1.0
+        _enemySprite.texturePosition.y = 0.5
+        
+        _animationSwitch = 1.0
     }
     
     // if defined it will call, run before the display, update game model, game loop! ran once per frame
@@ -61,9 +65,32 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         let elapsed = now.timeIntervalSince(_lastUpdate as Date)
         _lastUpdate = now
         
-        _animation += elapsed * 0.25
+        _animation += elapsed
         
-//        _sprite.position.x += Float(elapsed * 0.25)
+        if (_animation >= _animationSwitch) {
+            _animationSwitch = _animation + 0.33
+
+            if (_enemySprite.texturePosition.x == 0) {
+                _enemySprite.texturePosition.x = 0.33
+            } else if (_enemySprite.texturePosition.x == 0.33) {
+                _enemySprite.texturePosition.x = 0.66
+            } else {
+                _enemySprite.texturePosition.x = 0.0
+            }
+            
+            if (_playerSprite.texturePosition.x == 0) {
+                _playerSprite.texturePosition.x = 0.33
+            } else if (_playerSprite.texturePosition.x == 0.33) {
+                _playerSprite.texturePosition.x = 0.66
+            } else {
+                _playerSprite.texturePosition.x = 0.0
+            }
+            
+        }
+        
+//        _enemySprite.texturePosition.y += 0.25
+//        _enemySprite.texturePosition.y += 0.001
+//        _playerSprite.position.x += 0.001
         
 //        _enemySprite.position.x = Float(cos(_animation))
 //        _enemySprite.position.y = Float(sin(_animation))
