@@ -2,7 +2,13 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:cat.png">
+      location = "group:/Users/Elliott/Desktop/U of U/2018 Spring/CS 4530/FinalProject/dream-puff/dream-puff/if_ic_keyboard_arrow_left_48px_352467.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/Elliott/Desktop/U of U/2018 Spring/CS 4530/FinalProject/dream-puff/dream-puff/if_ic_keyboard_arrow_right_48px_352468.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/Elliott/Desktop/U of U/2018 Spring/CS 4530/FinalProject/dream-puff/dream-puff/if_ic_keyboard_arrow_up_48px_352469.png">
    </FileRef>
    <FileRef
       location = "self:">

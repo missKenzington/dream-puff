@@ -23,12 +23,16 @@ class Sprite {
         0.5, 0.5 // top right
     ]
     
-    static private let _quadTextureCoordinates: [Float] =
+    private static var _quadTextureCoordinates: [Float] =
     [
-        0.0, 0.25, // top right
-        0.33, 0.25, // bottom right
+        0.0, 1.0, // top right
+        1.0, 1.0, // bottom right
         0.0, 0.0, // top left
-        0.33, 0.0 // bottom left
+        1.0, 0.0 // bottom left
+//        0.0, 0.25, // top right
+//        0.33, 0.25, // bottom right
+//        0.0, 0.0, // top left
+//        0.33, 0.0 // bottom left
     ]
     
     private static func setup() {
@@ -44,7 +48,7 @@ class Sprite {
         void main()
         {
             gl_Position = vec4(position.x * scale.x + translate.x, position.y * scale.y + translate.y, 0.0, 1.0);
-            textureCoordinateInterpolated = vec2(textureCoordinate.x + translateTextureCoordinate.x, textureCoordinate.y + translateTextureCoordinate.y);
+            textureCoordinateInterpolated = vec2(textureCoordinate.x * scaleTextureCoordinate.x + translateTextureCoordinate.x, textureCoordinate.y * scaleTextureCoordinate.y + translateTextureCoordinate.y);
         }
         """
         
@@ -150,7 +154,7 @@ class Sprite {
         }
         glUniform2f(glGetUniformLocation(Sprite._program, "translate"), position.x, position.y)
         glUniform2f(glGetUniformLocation(Sprite._program, "translateTextureCoordinate"), texturePosition.x, texturePosition.y)
-        glUniform2f(glGetUniformLocation(Sprite._program, "scaleTextureCoordinate"), 1.0, 1.0)
+        glUniform2f(glGetUniformLocation(Sprite._program, "scaleTextureCoordinate"), textureScale.x, textureScale.y)
         glUniform1i(glGetUniformLocation(Sprite._program, "textureUnit"), 0)
         glUniform2f(glGetUniformLocation(Sprite._program, "scale"), width, height)
         glBindTexture(GLenum(GL_TEXTURE_2D), texture)
