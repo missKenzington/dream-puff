@@ -61,18 +61,26 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         _upArrowSprite.texture = _upArrowTexture!.name
         _upArrowSprite.width = 0.25
         _upArrowSprite.height = 0.25
+        _upArrowSprite.position.x = 0.5
+        _upArrowSprite.position.y = -0.65
+        _upArrowSprite.textureScale.x = 1.0
+        _upArrowSprite.textureScale.y = 1.0
         
         _downArrowTexture = try! GLKTextureLoader.texture(with: UIImage(named: "down-arrow")!.cgImage!, options: nil)
         _downArrowSprite.texture = _downArrowTexture!.name
         _downArrowSprite.width = 0.25
         _downArrowSprite.height = 0.25
+        _downArrowSprite.position.x = -0.5
+        _downArrowSprite.position.y = -0.65
+        _downArrowSprite.textureScale.x = 1.0
+        _downArrowSprite.textureScale.y = 1.0
         
         _leftArrowTexture = try! GLKTextureLoader.texture(with: UIImage(named: "left-arrow")!.cgImage!, options: nil)
         _leftArrowSprite.texture = _leftArrowTexture!.name
         _leftArrowSprite.width = 0.25
         _leftArrowSprite.height = 0.25
         _leftArrowSprite.position.x = -0.5
-        _leftArrowSprite.position.y = -0.8
+        _leftArrowSprite.position.y = -0.85
         _leftArrowSprite.textureScale.x = 1.0
         _leftArrowSprite.textureScale.y = 1.0
         
@@ -81,7 +89,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         _rightArrowSprite.width = 0.25
         _rightArrowSprite.height = 0.25
         _rightArrowSprite.position.x = 0.5
-        _rightArrowSprite.position.y = -0.8
+        _rightArrowSprite.position.y = -0.85
         _rightArrowSprite.textureScale.x = 1.0
         _rightArrowSprite.textureScale.y = 1.0
         
@@ -95,7 +103,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         _playerSprite.textureScale.x = 0.33
         _playerSprite.textureScale.y = 0.25
         
-        _enemyTexture = try! GLKTextureLoader.texture(with: UIImage(named: "cat_black")!.cgImage!, options: nil)
+        _enemyTexture = try! GLKTextureLoader.texture(with: UIImage(named: "cat_white")!.cgImage!, options: nil)
         _enemySprite.texture = _enemyTexture!.name
         _enemySprite.width = 0.25
         _enemySprite.height = 0.25
@@ -174,6 +182,10 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         super.touchesBegan(touches, with: event)
         
         let touch = touches.first! as UITouch
+        // 200, 400 is the center of the screen
+        print(self.view.bounds.height)
+        print("x")
+        print(self.view.bounds.width)
         print(touch)
     }
     
