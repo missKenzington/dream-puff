@@ -12,6 +12,13 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     
     private let _playerSprite: Sprite = Sprite()
     private let _enemySprite: Sprite = Sprite()
+    private var _enemies: [Sprite] = []
+    private var _titleSprite: Sprite = Sprite()
+    
+    private var _isLevelOne:Bool = true
+    private var _isLevelTwo:Bool = false
+    private var _isLevelThree:Bool = false
+    private var _finishLevel = false
     
     private let _backgroundSprite: Sprite = Sprite()
     
@@ -21,9 +28,13 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     private let _rightArrowSprite: Sprite = Sprite()
     
     private var _catTexture:  GLKTextureInfo? = nil
-    private var _enemyTexture: GLKTextureInfo? = nil
+    private var _whiteCatTexture: GLKTextureInfo? = nil
+    private var _blackCatTexture: GLKTextureInfo? = nil
+    private var _brownCatTexture: GLKTextureInfo? = nil
+    private var _orangeCatTexture: GLKTextureInfo? = nil
     
     private var _backgroundTexture: GLKTextureInfo? = nil
+    private var _levelOneTexture: GLKTextureInfo? = nil
     
     private var _upArrowTexture: GLKTextureInfo? = nil
     private var _downArrowTexture: GLKTextureInfo? = nil
@@ -31,7 +42,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     private var _rightArrowTexture: GLKTextureInfo? = nil
     
     private var _lastUpdate: NSDate = NSDate()
-    private var _animation = 0.0
+    private var _gameTime = 0.0
     private var _animationSwitch = 0.0
     
     override func viewDidLoad() {
@@ -43,14 +54,19 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         glkView.drawableColorFormat = .RGBA8888
         EAGLContext.setCurrent(glkView.context)
         
-        
         setup()
     }
     
     private func setup() {
-        glClearColor(0.737254902, 0.9843137255, 1.0, 1.0)
+        glClearColor(1.0, 1.0, 1.0, 1.0)
+        _levelOneTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelOneTitle")!.cgImage!, options: nil)
+        _titleSprite.texture = _levelOneTexture!.name
+        _titleSprite.width = 0.75
+        _titleSprite.height = 0.5
+        _titleSprite.textureScale.x = 1.0
+        _titleSprite.textureScale.y = 1.0
         
-        _backgroundTexture = try! GLKTextureLoader.texture(with: UIImage(named: "background1.jpg")!.cgImage!, options: nil)
+        _backgroundTexture = try! GLKTextureLoader.texture(with: UIImage(named: "sky.jpg")!.cgImage!, options: nil)
         _backgroundSprite.texture = _backgroundTexture!.name
         _backgroundSprite.width = 2.0
         _backgroundSprite.height = 2.0
@@ -94,20 +110,46 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         _rightArrowSprite.textureScale.y = 1.0
         
         // setup sprite with a texture
-        _catTexture = try! GLKTextureLoader.texture(with: UIImage(named: "unicorn")!.cgImage!, options: nil)
+        _catTexture = try! GLKTextureLoader.texture(with: UIImage(named: "cat_white")!.cgImage!, options: nil)
         _playerSprite.texture = _catTexture!.name
-        _playerSprite.height = 0.20
-        _playerSprite.width = 0.20
+        _playerSprite.height = 0.25
+        _playerSprite.width = 0.25
         _playerSprite.position.x = 0.0
-        _playerSprite.position.y = -0.7
+        _playerSprite.position.y = -0.3
         _playerSprite.textureScale.x = 0.33
         _playerSprite.textureScale.y = 0.25
         
-        _enemyTexture = try! GLKTextureLoader.texture(with: UIImage(named: "cat_white")!.cgImage!, options: nil)
-        _enemySprite.texture = _enemyTexture!.name
+//        _whiteCatTexture = try! GLKTextureLoader.texture(with: UIImage(named: "cat_white")!.cgImage!, options: nil)
+        _blackCatTexture = try! GLKTextureLoader.texture(with: UIImage(named: "cat_black")!.cgImage!, options: nil)
+        _orangeCatTexture = try! GLKTextureLoader.texture(with: UIImage(named: "cat_orange")!.cgImage!, options: nil)
+        _brownCatTexture = try! GLKTextureLoader.texture(with: UIImage(named: "cat_brown")!.cgImage!, options: nil)
+        
+        var dropTime = 10.0
+        for index in 0...9 {
+            let sprite = Sprite()
+            
+            if (index < 3) {
+                sprite.texture = _blackCatTexture!.name
+            } else if (index < 6) {
+                sprite.texture = _orangeCatTexture!.name
+            } else {
+                sprite.texture = _brownCatTexture!.name
+            }
+            sprite.width = 0.25
+            sprite.height = 0.25
+            sprite.position.x = Random.random(min: -0.5, max: 0.5)
+            sprite.position.y = 1.1
+            sprite.texturePosition.y = 0.5
+            sprite.textureScale.x = 0.33
+            sprite.textureScale.y = 0.25
+            sprite.drawTime = dropTime
+            dropTime += 2.0
+            _enemies.append(sprite)
+        }
+        _enemySprite.texture = _catTexture!.name
         _enemySprite.width = 0.25
         _enemySprite.height = 0.25
-        _enemySprite.position.x = -0.4
+        _enemySprite.position.x = Random.random(min: -0.5, max: 0.5)
         _enemySprite.position.y = 1.0
         _enemySprite.texturePosition.y = 0.5
         _enemySprite.textureScale.x = 0.33
@@ -122,28 +164,79 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         let elapsed = now.timeIntervalSince(_lastUpdate as Date)
         _lastUpdate = now
         
-        _animation += elapsed
+        _gameTime += elapsed
         
-        if (_animation >= _animationSwitch) {
-            _animationSwitch = _animation + 0.33
+        animateSprites()
+//
+//        // animate the sprites
+//        if (_gameTime >= _animationSwitch) {
+//            _animationSwitch = _gameTime + 0.33
+//
+//            if (_enemySprite.texturePosition.x == 0) {
+//                _enemySprite.texturePosition.x = 0.33
+//            } else if (_enemySprite.texturePosition.x == 0.33) {
+//                _enemySprite.texturePosition.x = 0.66
+//            } else {
+//                _enemySprite.texturePosition.x = 0.0
+//            }
+//
+//            if (_playerSprite.texturePosition.x == 0) {
+//                _playerSprite.texturePosition.x = 0.33
+//            } else if (_playerSprite.texturePosition.x == 0.33) {
+//                _playerSprite.texturePosition.x = 0.66
+//            } else {
+//                _playerSprite.texturePosition.x = 0.0
+//            }
+//        }
+        
+        
 
-            if (_enemySprite.texturePosition.x == 0) {
-                _enemySprite.texturePosition.x = 0.33
-            } else if (_enemySprite.texturePosition.x == 0.33) {
-                _enemySprite.texturePosition.x = 0.66
-            } else {
-                _enemySprite.texturePosition.x = 0.0
+        if (_isLevelOne == true){
+            
+            var clearedEnemies = 0
+            for enemy in _enemies {
+                if (enemy.drawTime > _gameTime) {
+                    continue
+                }
+                if (_finishLevel == false) {
+                    enemy.position.y -= 0.01
+
+                    if (enemy.position.y < -1.0){
+                        enemy.position.x = Random.random(min: -0.5, max: 0.5)
+                        enemy.position.y = 1.0
+                    }
+                    if (_gameTime >  15.0) {
+                        _finishLevel = true
+                    }
+                } else {
+                    enemy.position.y -= 0.01
+                   
+                    if (enemy.position.y > -1.0) {
+                        clearedEnemies += 1
+                        if (clearedEnemies == 10) {
+                            _isLevelOne = false
+                            _isLevelTwo = true
+//                            _titleSprite.texture =
+                        }
+                    }
+                }
             }
             
-            if (_playerSprite.texturePosition.x == 0) {
-                _playerSprite.texturePosition.x = 0.33
-            } else if (_playerSprite.texturePosition.x == 0.33) {
-                _playerSprite.texturePosition.x = 0.66
-            } else {
-                _playerSprite.texturePosition.x = 0.0
-            }
-            
+//            _enemySprite.position.y -= 0.01
+//            if (_finishLevel == false) {
+//                if (_enemySprite.position.y < -1.0){
+//                    _enemySprite.position.x = Random.random(min: -0.5, max: 0.5)
+//                    _enemySprite.position.y = 1.0
+//                }
+//            } else {
+//                if (_enemySprite.position.y > -1.0) {
+//                    _isLevelOne = false
+//                    _isLevelTwo = true
+//                }
+//            }
         }
+        
+        
         
 //        _enemySprite.texturePosition.y += 0.25
 //        _enemySprite.texturePosition.y += 0.001
@@ -153,6 +246,30 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
 //        _enemySprite.position.y = Float(sin(_animation))
 //        _sprite.position.y += 0.005
         
+    }
+    
+    func animateSprites() {
+        if (_gameTime >= _animationSwitch) {
+            _animationSwitch = _gameTime + 0.33
+
+            if (_playerSprite.texturePosition.x == 0) {
+                _playerSprite.texturePosition.x = 0.33
+            } else if (_playerSprite.texturePosition.x == 0.33) {
+                _playerSprite.texturePosition.x = 0.66
+            } else {
+                _playerSprite.texturePosition.x = 0.0
+            }
+            
+            for enemy in _enemies {
+                if (enemy.texturePosition.x == 0) {
+                    enemy.texturePosition.x = 0.33
+                } else if (enemy.texturePosition.x == 0.33) {
+                    enemy.texturePosition.x = 0.66
+                } else {
+                    enemy.texturePosition.x = 0.0
+                }
+            }
+        }
     }
     
     func glkViewControllerUpdate(_ controller: GLKViewController) {
@@ -167,15 +284,24 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         let offset = GLsizei((view.bounds.height - view.bounds.width) * -0.5 * view.contentScaleFactor)
         glViewport(offset, 0 ,height, height)
         _backgroundSprite.draw()
-        _upArrowSprite.draw()
-        _downArrowSprite.draw()
-        _leftArrowSprite.draw()
-        _rightArrowSprite.draw()
         
+        print(_gameTime < 8.0)
         
-        _playerSprite.draw()
-        _enemySprite.draw()
-
+        if (_gameTime < 8.0) {
+            _titleSprite.draw()
+        } else {
+            _upArrowSprite.draw()
+            _downArrowSprite.draw()
+            _leftArrowSprite.draw()
+            _rightArrowSprite.draw()
+            _playerSprite.draw()
+            //        _enemySprite.draw()
+            
+            for enemy in _enemies {
+                enemy.draw()
+            }
+        }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -200,10 +326,6 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             glkY = Float((point.y - self.view.center.x)/(self.view.bounds.maxY - self.view.center.y))
             glkY = 1.0 - Float((point.y)/(self.view.center.y))
         }
-        
-        print(glkX)
-        print(glkY)
-        
         var absX = abs(glkX - _rightArrowSprite.position.x)
         var absY = abs(glkY - _rightArrowSprite.position.y)
         var xSquared = absX * absX
@@ -246,12 +368,6 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             _playerSprite.position.y -= 0.05
             _playerSprite.texturePosition.y = 0.5
         }
-        
-        
-        
-//        print(self.view.center.x - point.x)
-//        print("x")
-//        print(self.view.center.y - point.y)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -262,5 +378,28 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     override func viewWillDisappear(_ animated: Bool) {
         viewWillDisappear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    
+}
+
+public class Random {
+    
+    /// Randomly returns either 1.0 or -1.0.
+    public static var randomSign: Float {
+        return (arc4random_uniform(2) == 0) ? 1.0 : -1.0
+    }
+    
+    /// Returns a random floating point number between 0.0 and 1.0, inclusive.
+    public static var random: Float {
+        return Float(drand48())
+    }
+    
+    /// Random CGFloat between 0 and n-1.
+    ///
+    /// - Parameter n:  Interval max
+    /// - Returns:      Returns a random CGFloat point number between 0 and n max
+    public static func random(min: Float, max: Float) -> Float {
+        return Random.random * (max - min) + min
     }
 }

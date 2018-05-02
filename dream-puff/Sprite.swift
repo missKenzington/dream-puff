@@ -146,6 +146,7 @@ class Sprite {
     var height: Float = 1.0
     var texture: GLuint = 0
     var isEnemy: Bool = false
+    var drawTime: Double = 0.0
 
     
     func draw() {
