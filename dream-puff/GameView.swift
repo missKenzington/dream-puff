@@ -167,7 +167,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             sprite.texture = _batTexture!.name
             sprite.width = 0.25
             sprite.height = 0.25
-            sprite.position.x = -0.60
+            sprite.position.x = -0.70
             sprite.position.y = Random.random(min: -1.0, max: 1.0)
             sprite.texturePosition.y = 0.0
             sprite.textureScale.x = 0.33
@@ -211,14 +211,14 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                    
                     if (enemy.position.y < -1.0) {
                         clearedEnemies += 1
-                    }
-                    if (clearedEnemies == 10) {
-                        _isLevelOne = false
-                        _isLevelTwo = true
-                        _backgroundSprite.texture = _backgroundTextureLevelTwo!.name
-                        _titleSprite.texture = _levelTwoTexture!.name
-                        _displayTitleTime = 3.0
-                        _finishLevel = false
+                        if (clearedEnemies == 10) {
+                            _isLevelOne = false
+                            _isLevelTwo = true
+                            _backgroundSprite.texture = _backgroundTextureLevelTwo!.name
+                            _titleSprite.texture = _levelTwoTexture!.name
+                            _displayTitleTime = 5.0
+                            _finishLevel = false
+                        }
                     }
                 }
             }
@@ -231,59 +231,60 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                 if (_finishLevel == false) {
                     enemy.position.x += 0.01
                     
-                    if (enemy.position.y < -1.0){
-                        enemy.position.x = -0.52
-                        enemy.position.y = Random.random(min: -0.5, max: 0.5)
+                    if (enemy.position.x > 0.7){
+                        enemy.position.x = -0.6
+                        enemy.position.y = Random.random(min: -1.0, max: 1.0)
                     }
-                    if (_gameTime >  55.0) {
+                    if (_gameTime >  60.0) {
                         _finishLevel = true
                     }
                 } else {
-                    enemy.position.y += 0.01
+                    enemy.position.x += 0.01
                     
-                    if (enemy.position.x > 0.52) {
+                    if (enemy.position.x > 0.7) {
                         clearedEnemies += 1
-                    }
-                    if (clearedEnemies == 10) {
-                        _isLevelTwo = false
-                        _isLevelThree = true
-                        _backgroundSprite.texture = _backgroundTextureLevelThree!.name
-                        _titleSprite.texture = _levelThreeTexture!.name
-                        _displayTitleTime = 3.0
-                        _finishLevel = false
+                        if (clearedEnemies == 6) {
+                            _isLevelTwo = false
+                            _isLevelThree = true
+                            _backgroundSprite.texture = _backgroundTextureLevelThree!.name
+                            _titleSprite.texture = _levelThreeTexture!.name
+                            _displayTitleTime = 5.0
+                            _finishLevel = false
+                        }
                     }
                 }
             }
         } else if (_isLevelThree == true) {
             var clearedEnemies = 0
-            for enemy in _enemiesLevelTwo {
-                if (enemy.dropTime > _gameTime) {
-                    continue
-                }
-                if (_finishLevel == false) {
-                    enemy.position.y -= 0.01
-                    
-                    if (enemy.position.y < -1.0){
-                        enemy.position.x = Random.random(min: -0.5, max: 0.5)
-                        enemy.position.y = 1.2
-                    }
-                    if (_gameTime >  50.0) {
-                        _finishLevel = true
-                    }
-                } else {
-                    enemy.position.y -= 0.01
-                    
-                    if (enemy.position.y < -1.0) {
-                        clearedEnemies += 1
-                    }
-                    if (clearedEnemies == 10) {
-                        _isLevelOne = false
-                        _isLevelTwo = true
-                        _backgroundSprite.texture = _backgroundTextureLevelTwo!.name
-                        _titleSprite.texture = _levelTwoTexture!.name
-                    }
-                }
-            }
+            print("level 3")
+//            for enemy in _enemiesLevelTwo {
+//                if (enemy.dropTime > _gameTime) {
+//                    continue
+//                }
+//                if (_finishLevel == false) {
+//                    enemy.position.y -= 0.01
+//
+//                    if (enemy.position.y < -1.0){
+//                        enemy.position.x = Random.random(min: -0.5, max: 0.5)
+//                        enemy.position.y = 1.2
+//                    }
+//                    if (_gameTime >  50.0) {
+//                        _finishLevel = true
+//                    }
+//                } else {
+//                    enemy.position.y -= 0.01
+//
+//                    if (enemy.position.y < -1.0) {
+//                        clearedEnemies += 1
+//                    }
+//                    if (clearedEnemies == 10) {
+//                        _isLevelOne = false
+//                        _isLevelTwo = true
+//                        _backgroundSprite.texture = _backgroundTextureLevelTwo!.name
+//                        _titleSprite.texture = _levelTwoTexture!.name
+//                    }
+//                }
+//            }
         }
         
         
@@ -371,6 +372,12 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             for enemy in _enemiesLevelTwo {
                 enemy.draw()
             }
+        } else if (_isLevelThree == true) {
+            _upArrowSprite.draw()
+            _downArrowSprite.draw()
+            _leftArrowSprite.draw()
+            _rightArrowSprite.draw()
+            _playerSprite.draw()
         }
         
     }
