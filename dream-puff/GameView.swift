@@ -29,6 +29,11 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     private var lifeTwoSprite: Sprite = Sprite()
     private var lifeThreeSprite: Sprite = Sprite()
     
+    private var _scoreOneSprite: Sprite = Sprite()
+    private var _scoreTwoSprite: Sprite = Sprite()
+    private var _scoreThreeSprite: Sprite = Sprite()
+    
+    
     private var _bossGoLeft: Bool = true
     
     private var _isLevelOne:Bool = true
@@ -72,6 +77,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     private var _rightArrowTexture: GLKTextureInfo? = nil
     
     private var _lifeTexture: GLKTextureInfo? = nil
+    private var _scoreTexture: GLKTextureInfo? = nil
     
     private var _lastUpdate: NSDate = NSDate()
     public var _gameTime = 0.0
@@ -244,6 +250,35 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         lifeThreeSprite.textureScale.y = 1.0
         lifeThreeSprite.position.x = 0.1
         lifeThreeSprite.position.y = -0.78
+        
+        _scoreTexture = try! GLKTextureLoader.texture(with: UIImage(named: "Number-collection")!.cgImage!, options: nil)
+        _scoreOneSprite.texture = _scoreTexture!.name
+        _scoreTwoSprite.texture = _scoreTexture!.name
+        _scoreThreeSprite.texture = _scoreTexture!.name
+        
+        _scoreOneSprite.width = 0.20
+        _scoreOneSprite.height = 0.20
+        _scoreOneSprite.textureScale.x = 0.16
+        _scoreOneSprite.textureScale.y = 0.2
+        _scoreOneSprite.position.x = -0.16
+        _scoreOneSprite.position.y = 0.9
+        _scoreOneSprite.texturePosition.y = 0.18
+        
+        _scoreTwoSprite.width = 0.20
+        _scoreTwoSprite.height = 0.20
+        _scoreTwoSprite.textureScale.x = 0.16
+        _scoreTwoSprite.textureScale.y = 0.2
+        _scoreTwoSprite.position.x = -0.06
+        _scoreTwoSprite.position.y = 0.9
+        _scoreTwoSprite.texturePosition.y = 0.18
+        
+        _scoreThreeSprite.width = 0.20
+        _scoreThreeSprite.height = 0.20
+        _scoreThreeSprite.textureScale.x = 0.16
+        _scoreThreeSprite.textureScale.y = 0.2
+        _scoreThreeSprite.position.x = 0.04
+        _scoreThreeSprite.position.y = 0.9
+        _scoreThreeSprite.texturePosition.y = 0.18
         
         _levelOneTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelOneTitle")!.cgImage!, options: nil)
         _levelTwoTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelTwoTitle")!.cgImage!, options: nil)
@@ -461,7 +496,6 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                         enemy.isDead = true
                         enemy.height = 0
                         enemy.width = 0
-                        print("COLLISION")
                     }
                 }
             }
@@ -508,7 +542,6 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                         enemy.isDead = true
                         enemy.height = 0
                         enemy.width = 0
-                        print("COLLISION")
                     }
                 }
             }
@@ -594,7 +627,6 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                         enemy.isDead = true
                         enemy.height = 0
                         enemy.width = 0
-                        print("COLLISION")
                     }
                 }
             }
@@ -688,6 +720,10 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         } else if (_isLevelOne == true) {
             _goBackSprite.draw()
             
+            _scoreOneSprite.draw()
+            _scoreTwoSprite.draw()
+            _scoreThreeSprite.draw()
+            
             if (_lives == 3) {
                 lifeOneSprite.draw()
                 lifeTwoSprite.draw()
@@ -711,6 +747,9 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             }
         } else if (_isLevelTwo == true) {
             _goBackSprite.draw()
+            _scoreOneSprite.draw()
+            _scoreTwoSprite.draw()
+            _scoreThreeSprite.draw()
 
             if (_lives == 3) {
                 lifeOneSprite.draw()
@@ -734,6 +773,9 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             }
         } else if (_isLevelThree == true) {
             _goBackSprite.draw()
+            _scoreOneSprite.draw()
+            _scoreTwoSprite.draw()
+            _scoreThreeSprite.draw()
 
             if (_lives == 3) {
                 lifeOneSprite.draw()
@@ -834,7 +876,6 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         
         if ((xSquared + ySquared < radius)) {
             // go back to the main screen and save the game.
-            print("go back")
             self.extraDelegate?.returnFromGame()
         }
     }
