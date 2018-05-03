@@ -17,6 +17,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     private var _enemiesLevelThree: [Sprite] = []
     private var _titleSprite: Sprite = Sprite()
     private var _bossSprite: Sprite = Sprite()
+    private var _goBackSprite: Sprite = Sprite()
     
     private var _bossGoLeft: Bool = true
     
@@ -45,9 +46,13 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     private var _backgroundTextureLevelOne: GLKTextureInfo? = nil
     private var _backgroundTextureLevelTwo: GLKTextureInfo? = nil
     private var _backgroundTextureLevelThree: GLKTextureInfo? = nil
+    private var _backgroundTextureLevelWinner: GLKTextureInfo? = nil
     private var _levelOneTexture: GLKTextureInfo? = nil
     private var _levelTwoTexture: GLKTextureInfo? = nil
     private var _levelThreeTexture: GLKTextureInfo? = nil
+    private var _winnerTitleTexture: GLKTextureInfo? = nil
+    
+    private var _goBackTexture: GLKTextureInfo? = nil
     
     private var _upArrowTexture: GLKTextureInfo? = nil
     private var _downArrowTexture: GLKTextureInfo? = nil
@@ -76,6 +81,17 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         _levelOneTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelOneTitle")!.cgImage!, options: nil)
         _levelTwoTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelTwoTitle")!.cgImage!, options: nil)
         _levelThreeTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelThreeTitle")!.cgImage!, options: nil)
+        _winnerTitleTexture = try! GLKTextureLoader.texture(with: UIImage(named: "WinnerTitle")!.cgImage!, options: nil)
+        _goBackTexture = try! GLKTextureLoader.texture(with: UIImage(named: "go-back")!.cgImage!, options: nil)
+        
+        _goBackSprite.texture = _goBackTexture!.name
+        _goBackSprite.width = 0.1
+        _goBackSprite.height = 0.1
+        _goBackSprite.textureScale.x = 1.0
+        _goBackSprite.textureScale.y = 1.0
+        _goBackSprite.position.x = 0.0
+        _goBackSprite.position.y = -0.9
+        
         _titleSprite.texture = _levelOneTexture!.name
         _titleSprite.width = 0.75
         _titleSprite.height = 0.5
@@ -85,6 +101,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         _backgroundTextureLevelOne = try! GLKTextureLoader.texture(with: UIImage(named: "sky.jpg")!.cgImage!, options: nil)
         _backgroundTextureLevelTwo = try! GLKTextureLoader.texture(with: UIImage(named: "dark-sky.jpg")!.cgImage!, options: nil)
         _backgroundTextureLevelThree = try! GLKTextureLoader.texture(with: UIImage(named: "underwater-level.png")!.cgImage!, options: nil)
+        _backgroundTextureLevelWinner = try! GLKTextureLoader.texture(with: UIImage(named: "unicorn-ending.jpg")!.cgImage!, options: nil)
         _backgroundSprite.texture = _backgroundTextureLevelOne!.name
         _backgroundSprite.width = 2.0
         _backgroundSprite.height = 2.0
@@ -325,15 +342,15 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                         clearedEnemies += 1
                         if (clearedEnemies == 6) {
                             _isLevelThree = false
-//                            _isLevelThree = true
-//                            _backgroundSprite.texture = _backgroundTextureLevelThree!.name
-//                            _titleSprite.texture = _levelThreeTexture!.name
-                            _displayTitleTime = 5.0
-                            _finishLevel = false
+                            _backgroundSprite.texture = _backgroundTextureLevelWinner!.name
+                            _titleSprite.texture = _winnerTitleTexture!.name
+                            _displayTitleTime = -1.0
                         }
                     }
                 }
             }
+        } else if (_isLevelOne == false && _isLevelTwo == false && _isLevelThree == false) {
+            print("Game over")
         }
         
         
@@ -416,7 +433,11 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         if ((_displayTitleTime > 0.0)) {
             _displayTitleTime -= 0.1
             _titleSprite.draw()
+        } else if ((_displayTitleTime == -1.0)) {
+            _titleSprite.draw()
         } else if (_isLevelOne == true) {
+            _goBackSprite.draw()
+
             _upArrowSprite.draw()
             _downArrowSprite.draw()
             _leftArrowSprite.draw()
@@ -427,6 +448,8 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                 enemy.draw()
             }
         } else if (_isLevelTwo == true) {
+            _goBackSprite.draw()
+
             _upArrowSprite.draw()
             _downArrowSprite.draw()
             _leftArrowSprite.draw()
@@ -437,6 +460,8 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                 enemy.draw()
             }
         } else if (_isLevelThree == true) {
+            _goBackSprite.draw()
+
             _upArrowSprite.draw()
             _downArrowSprite.draw()
             _leftArrowSprite.draw()
@@ -515,6 +540,17 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         if ((xSquared + ySquared < radius)) {
             _playerSprite.position.y -= 0.05
             _playerSprite.texturePosition.y = 0.5
+        }
+        
+        absX = abs(glkX - _goBackSprite.position.x)
+        absY = abs(glkY - _goBackSprite.position.y)
+        xSquared = absX * absX
+        ySquared = absY * absY
+        radius = (_goBackSprite.width * 0.5) * (_goBackSprite.width * 0.5)
+        
+        if ((xSquared + ySquared < radius)) {
+            // go back to the main screen and save the game.
+            print("go back")
         }
     }
     
