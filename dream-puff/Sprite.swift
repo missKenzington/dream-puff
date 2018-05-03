@@ -147,7 +147,7 @@ class Sprite {
     var texture: GLuint = 0
     var isEnemy: Bool = false
     var dropTime: Double = 0.0
-
+    var isDead: Bool = false
     
     func draw() {
         if Sprite._program == 0 {

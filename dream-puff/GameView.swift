@@ -8,7 +8,14 @@
 
 import GLKit
 
+protocol GameViewDelegate: AnyObject {
+    func returnFromGame()
+}
+
 class GameView: GLKViewController, GLKViewControllerDelegate{
+    
+    weak var extraDelegate: GameViewDelegate? = nil
+
     
     private let _playerSprite: Sprite = Sprite()
     private let _enemySprite: Sprite = Sprite()
@@ -18,6 +25,9 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     private var _titleSprite: Sprite = Sprite()
     private var _bossSprite: Sprite = Sprite()
     private var _goBackSprite: Sprite = Sprite()
+    private var lifeOneSprite: Sprite = Sprite()
+    private var lifeTwoSprite: Sprite = Sprite()
+    private var lifeThreeSprite: Sprite = Sprite()
     
     private var _bossGoLeft: Bool = true
     
@@ -47,10 +57,12 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     private var _backgroundTextureLevelTwo: GLKTextureInfo? = nil
     private var _backgroundTextureLevelThree: GLKTextureInfo? = nil
     private var _backgroundTextureLevelWinner: GLKTextureInfo? = nil
+    private var _backgroundTextureLevelLoser: GLKTextureInfo? = nil
     private var _levelOneTexture: GLKTextureInfo? = nil
     private var _levelTwoTexture: GLKTextureInfo? = nil
     private var _levelThreeTexture: GLKTextureInfo? = nil
     private var _winnerTitleTexture: GLKTextureInfo? = nil
+    private var _loserTitleTexture: GLKTextureInfo? = nil
     
     private var _goBackTexture: GLKTextureInfo? = nil
     
@@ -59,10 +71,13 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     private var _leftArrowTexture: GLKTextureInfo? = nil
     private var _rightArrowTexture: GLKTextureInfo? = nil
     
+    private var _lifeTexture: GLKTextureInfo? = nil
+    
     private var _lastUpdate: NSDate = NSDate()
     private var _gameTime = 0.0
     private var _animationSwitch = 0.0
     private var _displayTitleTime = 3.0
+    private var _lives: Int = 3
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,12 +91,156 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         setup()
     }
     
+    func resetGame() {
+        _gameTime = 0.0
+        _lives = 3
+        
+        _goBackSprite.width = 0.1
+        _goBackSprite.height = 0.1
+        _goBackSprite.textureScale.x = 1.0
+        _goBackSprite.textureScale.y = 1.0
+        _goBackSprite.position.x = 0.0
+        _goBackSprite.position.y = -0.9
+        
+        _titleSprite.width = 0.75
+        _titleSprite.height = 0.5
+        _titleSprite.textureScale.x = 1.0
+        _titleSprite.textureScale.y = 1.0
+        
+        _backgroundSprite.width = 2.0
+        _backgroundSprite.height = 2.0
+        _backgroundSprite.textureScale.x = 1.0
+        _backgroundSprite.textureScale.y = 1.0
+        
+        _upArrowSprite.width = 0.25
+        _upArrowSprite.height = 0.25
+        _upArrowSprite.position.x = 0.5
+        _upArrowSprite.position.y = -0.65
+        _upArrowSprite.textureScale.x = 1.0
+        _upArrowSprite.textureScale.y = 1.0
+        
+        _downArrowSprite.width = 0.25
+        _downArrowSprite.height = 0.25
+        _downArrowSprite.position.x = -0.5
+        _downArrowSprite.position.y = -0.65
+        _downArrowSprite.textureScale.x = 1.0
+        _downArrowSprite.textureScale.y = 1.0
+        
+        _leftArrowSprite.width = 0.25
+        _leftArrowSprite.height = 0.25
+        _leftArrowSprite.position.x = -0.5
+        _leftArrowSprite.position.y = -0.85
+        _leftArrowSprite.textureScale.x = 1.0
+        _leftArrowSprite.textureScale.y = 1.0
+        
+        _rightArrowSprite.width = 0.25
+        _rightArrowSprite.height = 0.25
+        _rightArrowSprite.position.x = 0.5
+        _rightArrowSprite.position.y = -0.85
+        _rightArrowSprite.textureScale.x = 1.0
+        _rightArrowSprite.textureScale.y = 1.0
+        
+        // setup sprite with a texture
+        _playerSprite.height = 0.20
+        _playerSprite.width = 0.20
+        _playerSprite.position.x = 0.0
+        _playerSprite.position.y = -0.3
+        _playerSprite.textureScale.x = 0.33
+        _playerSprite.textureScale.y = 0.25
+        
+        // setup boss sprite with a texture
+        _bossSprite.height = 0.45
+        _bossSprite.width = 0.6
+        _bossSprite.position.x = 0.0
+        _bossSprite.position.y = 0.8
+        _bossSprite.textureScale.x = 1.0
+        _bossSprite.textureScale.y = 1.0
+        
+        var dropTime = 3.0
+        
+        for sprite in _enemiesLevelOne {
+            sprite.width = 0.25
+            sprite.height = 0.25
+            sprite.position.x = Random.random(min: -0.5, max: 0.5)
+            sprite.position.y = 1.2
+            sprite.texturePosition.y = 0.5
+            sprite.textureScale.x = 0.33
+            sprite.textureScale.y = 0.25
+            sprite.dropTime = dropTime
+            dropTime += 2.0
+            sprite.isDead = false
+        }
+        
+        dropTime = 35.0
+        
+        for sprite in _enemiesLevelTwo {
+            sprite.width = 0.25
+            sprite.height = 0.25
+            sprite.position.x = -0.70
+            sprite.position.y = Random.random(min: -1.0, max: 1.0)
+            sprite.texturePosition.y = 0.0
+            sprite.textureScale.x = 0.33
+            sprite.textureScale.y = 0.5
+            sprite.dropTime = dropTime
+            dropTime += 1.0
+            sprite.isDead = false
+        }
+        
+        dropTime = 70.0
+        
+        for sprite in _enemiesLevelThree {
+            sprite.width = 0.25
+            sprite.height = 0.25
+            sprite.position.x = -0.70
+            sprite.position.y = Random.random(min: -1.0, max: 1.0)
+            sprite.texturePosition.y = 0.0
+            sprite.textureScale.x = 0.33
+            sprite.textureScale.y = 0.5
+            sprite.dropTime = dropTime
+            dropTime += 1.0
+            sprite.isDead = false
+        }
+        
+        _animationSwitch = 1.0
+        _displayTitleTime = 3.0
+        _titleSprite.texture = _levelOneTexture!.name
+    }
+    
+    
     private func setup() {
         glClearColor(1.0, 1.0, 1.0, 1.0)
+        
+        _lifeTexture = try! GLKTextureLoader.texture(with: UIImage(named: "life.png")!.cgImage!, options: nil)
+        lifeOneSprite.texture = _lifeTexture!.name
+        lifeTwoSprite.texture = _lifeTexture!.name
+        lifeThreeSprite.texture = _lifeTexture!.name
+        
+        lifeOneSprite.width = 0.1
+        lifeOneSprite.height = 0.1
+        lifeOneSprite.textureScale.x = 1.0
+        lifeOneSprite.textureScale.y = 1.0
+        lifeOneSprite.position.x = -0.1
+        lifeOneSprite.position.y = -0.78
+        
+        lifeTwoSprite.width = 0.1
+        lifeTwoSprite.height = 0.1
+        lifeTwoSprite.textureScale.x = 1.0
+        lifeTwoSprite.textureScale.y = 1.0
+        lifeTwoSprite.position.x = 0.0
+        lifeTwoSprite.position.y = -0.78
+        
+        lifeThreeSprite.width = 0.1
+        lifeThreeSprite.height = 0.1
+        lifeThreeSprite.textureScale.x = 1.0
+        lifeThreeSprite.textureScale.y = 1.0
+        lifeThreeSprite.position.x = 0.1
+        lifeThreeSprite.position.y = -0.78
+        
         _levelOneTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelOneTitle")!.cgImage!, options: nil)
         _levelTwoTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelTwoTitle")!.cgImage!, options: nil)
         _levelThreeTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelThreeTitle")!.cgImage!, options: nil)
         _winnerTitleTexture = try! GLKTextureLoader.texture(with: UIImage(named: "WinnerTitle")!.cgImage!, options: nil)
+        _loserTitleTexture = try! GLKTextureLoader.texture(with: UIImage(named: "YouLostTitle")!.cgImage!, options: nil)
         _goBackTexture = try! GLKTextureLoader.texture(with: UIImage(named: "go-back")!.cgImage!, options: nil)
         
         _goBackSprite.texture = _goBackTexture!.name
@@ -102,6 +261,8 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         _backgroundTextureLevelTwo = try! GLKTextureLoader.texture(with: UIImage(named: "dark-sky.jpg")!.cgImage!, options: nil)
         _backgroundTextureLevelThree = try! GLKTextureLoader.texture(with: UIImage(named: "underwater-level.png")!.cgImage!, options: nil)
         _backgroundTextureLevelWinner = try! GLKTextureLoader.texture(with: UIImage(named: "unicorn-ending.jpg")!.cgImage!, options: nil)
+        _backgroundTextureLevelLoser = try! GLKTextureLoader.texture(with: UIImage(named: "unicorn-sky.jpg")!.cgImage!, options: nil)
+
         _backgroundSprite.texture = _backgroundTextureLevelOne!.name
         _backgroundSprite.width = 2.0
         _backgroundSprite.height = 2.0
@@ -195,7 +356,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             _enemiesLevelOne.append(sprite)
         }
         
-        dropTime = 35.0
+        dropTime = 37.0
         
         for _ in 0...5 {
             let sprite = Sprite()
@@ -234,6 +395,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     
     // if defined it will call, run before the display, update game model, game loop! ran once per frame
     func update() {
+        
         let now = NSDate()
         let elapsed = now.timeIntervalSince(_lastUpdate as Date)
         _lastUpdate = now
@@ -242,7 +404,12 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         
         animateSprites()
 
-        if (_isLevelOne == true){
+        if (_lives == 0 ) {
+            _backgroundSprite.texture = _backgroundTextureLevelLoser!.name
+            _titleSprite.texture = _loserTitleTexture!.name
+            _displayTitleTime = -1.0
+        }
+        else if (_isLevelOne == true){
             var clearedEnemies = 0
             for enemy in _enemiesLevelOne {
                 if (enemy.dropTime > _gameTime) {
@@ -271,6 +438,21 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                             _displayTitleTime = 5.0
                             _finishLevel = false
                         }
+                    }
+                }
+                var absX = abs(enemy.position.x - _playerSprite.position.x)
+                var absY = abs(enemy.position.y - _playerSprite.position.y)
+                var xSquared = absX * absX
+                var ySquared = absY * absY
+                var radius = (_playerSprite.width * 0.5) * (_playerSprite.width * 0.5)
+                if ((xSquared + ySquared < radius)) {
+                    // collision!!
+                    if (enemy.isDead == false) {
+                        _lives -= 1
+                        enemy.isDead = true
+                        enemy.height = 0
+                        enemy.width = 0
+                        print("COLLISION")
                     }
                 }
             }
@@ -435,8 +617,21 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             _titleSprite.draw()
         } else if ((_displayTitleTime == -1.0)) {
             _titleSprite.draw()
+            _goBackSprite.draw()
         } else if (_isLevelOne == true) {
             _goBackSprite.draw()
+            
+            if (_lives == 3) {
+                lifeOneSprite.draw()
+                lifeTwoSprite.draw()
+                lifeThreeSprite.draw()
+            } else if (_lives == 2) {
+                lifeOneSprite.draw()
+                lifeTwoSprite.draw()
+            } else if (_lives == 1) {
+                lifeOneSprite.draw()
+            }
+            
 
             _upArrowSprite.draw()
             _downArrowSprite.draw()
@@ -450,6 +645,17 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         } else if (_isLevelTwo == true) {
             _goBackSprite.draw()
 
+            if (_lives == 3) {
+                lifeOneSprite.draw()
+                lifeTwoSprite.draw()
+                lifeThreeSprite.draw()
+            } else if (_lives == 2) {
+                lifeOneSprite.draw()
+                lifeTwoSprite.draw()
+            } else if (_lives == 1) {
+                lifeOneSprite.draw()
+            }
+            
             _upArrowSprite.draw()
             _downArrowSprite.draw()
             _leftArrowSprite.draw()
@@ -462,6 +668,17 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         } else if (_isLevelThree == true) {
             _goBackSprite.draw()
 
+            if (_lives == 3) {
+                lifeOneSprite.draw()
+                lifeTwoSprite.draw()
+                lifeThreeSprite.draw()
+            } else if (_lives == 2) {
+                lifeOneSprite.draw()
+                lifeTwoSprite.draw()
+            } else if (_lives == 1) {
+                lifeOneSprite.draw()
+            }
+            
             _upArrowSprite.draw()
             _downArrowSprite.draw()
             _leftArrowSprite.draw()
@@ -551,6 +768,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         if ((xSquared + ySquared < radius)) {
             // go back to the main screen and save the game.
             print("go back")
+            self.extraDelegate?.returnFromGame()
         }
     }
     
@@ -558,11 +776,11 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        viewWillDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
+
+//    override func viewWillDisappear(_ animated: Bool) {
+//        viewWillDisappear(animated)
+//        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+//    }
     
     
 }

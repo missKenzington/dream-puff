@@ -11,6 +11,7 @@ import UIKit
 
 protocol MainMenuDelegate: AnyObject {
     func newGame()
+    func returnToGame()
 }
 
 
@@ -19,6 +20,8 @@ class MainMenuView: UIView {
     
     // --------------------------- members --------------------------- //
     weak var delegate: MainMenuDelegate? = nil
+    
+    var showResume = false
     
 //    var panel: UIView = UIView()
     
@@ -56,7 +59,7 @@ class MainMenuView: UIView {
         button.setTitle("resume game", for: .normal)
         button.setTitleColor(UIColor.black, for: .normal)
         button.titleLabel!.font = UIFont(name: "chalkduster", size: 18)
-        //        button.addTarget(self, action: #selector(endGame), for: .touchUpInside)
+        button.addTarget(self, action: #selector(returnToLastGame), for: .touchUpInside)
         button.backgroundColor = UIColor(red: 0.737254902, green: 0.9843137255, blue: 1.0, alpha: 1.0)
         return button
     }()
@@ -106,16 +109,21 @@ class MainMenuView: UIView {
         
         startGameBtn.frame = CGRect(x: rect.minX, y:  rect.minY + 30, width: rect.width, height: 60)
         
-        resumeGameBtn.frame = CGRect(x: rect.minX, y:  rect.minY + 90, width: rect.width, height: 60)
-        
-        highScoresBtn.frame = CGRect(x: rect.minX, y:  rect.minY + 150, width: rect.width, height: 60)
-        
-        
-        
+        if (showResume == true) {
+            resumeGameBtn.frame = CGRect(x: rect.minX, y:  rect.minY + 90, width: rect.width, height: 60)
+            highScoresBtn.frame = CGRect(x: rect.minX, y:  rect.minY + 150, width: rect.width, height: 60)
+        } else {
+            highScoresBtn.frame = CGRect(x: rect.minX, y:  rect.minY + 90, width: rect.width, height: 60)
+
+        }
     }
     
     // --------------------------- Target Actions Methods --------------------------- //
     @objc func newGame(_ sender: UIButton) {
         delegate?.newGame()
+    }
+    
+    @objc func returnToLastGame(_ sender: UIButton) {
+        delegate?.returnToGame()
     }
 }
