@@ -9,6 +9,8 @@
 import UIKit
 
 class MainMenuViewController: UIViewController, MainMenuDelegate, GameViewDelegate {
+
+    
     
     var introView: MainMenuView {
         return view as! MainMenuView
@@ -66,5 +68,9 @@ class MainMenuViewController: UIViewController, MainMenuDelegate, GameViewDelega
     
     func returnToGame() {
         self.navigationController?.pushViewController(gameView, animated: true)
+    }
+    
+    func displayHighScoreTable() {
+        self.navigationController?.pushViewController(HighScoreTableViewController(), animated: true)
     }
 }

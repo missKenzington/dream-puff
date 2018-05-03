@@ -12,6 +12,7 @@ import UIKit
 protocol MainMenuDelegate: AnyObject {
     func newGame()
     func returnToGame()
+    func displayHighScoreTable()
 }
 
 
@@ -69,7 +70,7 @@ class MainMenuView: UIView {
         button.setTitle("high scores", for: .normal)
         button.setTitleColor(UIColor.black, for: .normal)
         button.titleLabel!.font = UIFont(name: "chalkduster", size: 18)
-        //        button.addTarget(self, action: #selector(endGame), for: .touchUpInside)
+        button.addTarget(self, action: #selector(displayHighScore), for: .touchUpInside)
         button.backgroundColor = UIColor(red: 0.9725490196, green: 1.0, blue: 0.5647058824, alpha: 1.0)
         return button
     }()
@@ -126,4 +127,9 @@ class MainMenuView: UIView {
     @objc func returnToLastGame(_ sender: UIButton) {
         delegate?.returnToGame()
     }
+    
+    @objc func displayHighScore(_ sender: UIButton) {
+        delegate?.displayHighScoreTable()
+    }
+    
 }
