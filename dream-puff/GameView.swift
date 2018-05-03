@@ -140,10 +140,10 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         // setup boss sprite with a texture
         _bossTexture = try! GLKTextureLoader.texture(with: UIImage(named: "whale-unicorn")!.cgImage!, options: nil)
         _bossSprite.texture = _bossTexture!.name
-        _bossSprite.height = 0.2
-        _bossSprite.width = 0.3
+        _bossSprite.height = 0.45
+        _bossSprite.width = 0.6
         _bossSprite.position.x = 0.0
-        _bossSprite.position.y = 0.9
+        _bossSprite.position.y = 0.8
         _bossSprite.textureScale.x = 1.0
         _bossSprite.textureScale.y = 1.0
         
@@ -294,12 +294,12 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             
             if (_bossGoLeft == true) {
                 _bossSprite.position.x -= 0.01
-                if (_bossSprite.position.x < 0.60) {
+                if (_bossSprite.position.x < -0.50) {
                     _bossGoLeft = false
                 }
             } else {
                 _bossSprite.position.x += 0.01
-                if (_bossSprite.position.x > 0.60) {
+                if (_bossSprite.position.x > 0.50) {
                     _bossGoLeft = true
                 }
             }
