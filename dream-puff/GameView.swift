@@ -37,8 +37,10 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     
     private var _backgroundTextureLevelOne: GLKTextureInfo? = nil
     private var _backgroundTextureLevelTwo: GLKTextureInfo? = nil
+    private var _backgroundTextureLevelThree: GLKTextureInfo? = nil
     private var _levelOneTexture: GLKTextureInfo? = nil
     private var _levelTwoTexture: GLKTextureInfo? = nil
+    private var _levelThreeTexture: GLKTextureInfo? = nil
     
     private var _upArrowTexture: GLKTextureInfo? = nil
     private var _downArrowTexture: GLKTextureInfo? = nil
@@ -66,6 +68,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         glClearColor(1.0, 1.0, 1.0, 1.0)
         _levelOneTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelOneTitle")!.cgImage!, options: nil)
         _levelTwoTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelTwoTitle")!.cgImage!, options: nil)
+        _levelThreeTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelThreeTitle")!.cgImage!, options: nil)
         _titleSprite.texture = _levelOneTexture!.name
         _titleSprite.width = 0.75
         _titleSprite.height = 0.5
@@ -74,6 +77,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         
         _backgroundTextureLevelOne = try! GLKTextureLoader.texture(with: UIImage(named: "sky.jpg")!.cgImage!, options: nil)
         _backgroundTextureLevelTwo = try! GLKTextureLoader.texture(with: UIImage(named: "dark-sky.jpg")!.cgImage!, options: nil)
+        _backgroundTextureLevelThree = try! GLKTextureLoader.texture(with: UIImage(named: "underwater-level.png")!.cgImage!, options: nil)
         _backgroundSprite.texture = _backgroundTextureLevelOne!.name
         _backgroundSprite.width = 2.0
         _backgroundSprite.height = 2.0
@@ -163,13 +167,13 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             sprite.texture = _batTexture!.name
             sprite.width = 0.25
             sprite.height = 0.25
-            sprite.position.x = Random.random(min: -0.5, max: 0.5)
-            sprite.position.y = 1.2
+            sprite.position.x = -0.60
+            sprite.position.y = Random.random(min: -1.0, max: 1.0)
             sprite.texturePosition.y = 0.0
             sprite.textureScale.x = 0.33
             sprite.textureScale.y = 0.5
             sprite.dropTime = dropTime
-            dropTime += 2.0
+            dropTime += 1.0
             _enemiesLevelTwo.append(sprite)
         }
         
@@ -218,20 +222,39 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                     }
                 }
             }
-            
-//            _enemySprite.position.y -= 0.01
-//            if (_finishLevel == false) {
-//                if (_enemySprite.position.y < -1.0){
-//                    _enemySprite.position.x = Random.random(min: -0.5, max: 0.5)
-//                    _enemySprite.position.y = 1.0
-//                }
-//            } else {
-//                if (_enemySprite.position.y > -1.0) {
-//                    _isLevelOne = false
-//                    _isLevelTwo = true
-//                }
-//            }
         } else if (_isLevelTwo == true) {
+            var clearedEnemies = 0
+            for enemy in _enemiesLevelTwo {
+                if (enemy.dropTime > _gameTime) {
+                    continue
+                }
+                if (_finishLevel == false) {
+                    enemy.position.x += 0.01
+                    
+                    if (enemy.position.y < -1.0){
+                        enemy.position.x = -0.52
+                        enemy.position.y = Random.random(min: -0.5, max: 0.5)
+                    }
+                    if (_gameTime >  55.0) {
+                        _finishLevel = true
+                    }
+                } else {
+                    enemy.position.y += 0.01
+                    
+                    if (enemy.position.x > 0.52) {
+                        clearedEnemies += 1
+                    }
+                    if (clearedEnemies == 10) {
+                        _isLevelTwo = false
+                        _isLevelThree = true
+                        _backgroundSprite.texture = _backgroundTextureLevelThree!.name
+                        _titleSprite.texture = _levelThreeTexture!.name
+                        _displayTitleTime = 3.0
+                        _finishLevel = false
+                    }
+                }
+            }
+        } else if (_isLevelThree == true) {
             var clearedEnemies = 0
             for enemy in _enemiesLevelTwo {
                 if (enemy.dropTime > _gameTime) {
@@ -262,6 +285,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                 }
             }
         }
+        
         
 //        _enemySprite.position.x = Float(cos(_animation))
 //        _enemySprite.position.y = Float(sin(_animation))
