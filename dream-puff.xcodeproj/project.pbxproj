@@ -36,6 +36,10 @@
 		4F7E0D61209ABC4E00827E2D /* YouLostTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E0D60209ABC4E00827E2D /* YouLostTitle.png */; };
 		4F7E0D63209AC8FD00827E2D /* HighScoreTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7E0D62209AC8FD00827E2D /* HighScoreTableViewController.swift */; };
 		4F7E0D65209ACBE900827E2D /* Number-collection.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E0D64209ACBE900827E2D /* Number-collection.png */; };
+		4F7E0D6A209AD19300827E2D /* ThreeBlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E0D66209AD19200827E2D /* ThreeBlock.png */; };
+		4F7E0D6B209AD19300827E2D /* TwoBlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E0D67209AD19300827E2D /* TwoBlock.png */; };
+		4F7E0D6C209AD19300827E2D /* ZeroBlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E0D68209AD19300827E2D /* ZeroBlock.png */; };
+		4F7E0D6D209AD19300827E2D /* OneBlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E0D69209AD19300827E2D /* OneBlock.png */; };
 		4F81437B209455A00004F566 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F81437A209455A00004F566 /* MainMenuView.swift */; };
 		4F81437D209455CC0004F566 /* Attributions in Resources */ = {isa = PBXBuildFile; fileRef = 4F81437C209455CC0004F566 /* Attributions */; };
 		4F81437F209458680004F566 /* sky.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F81437E209458680004F566 /* sky.jpg */; };
@@ -78,6 +82,10 @@
 		4F7E0D60209ABC4E00827E2D /* YouLostTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YouLostTitle.png; sourceTree = "<group>"; };
 		4F7E0D62209AC8FD00827E2D /* HighScoreTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighScoreTableViewController.swift; sourceTree = "<group>"; };
 		4F7E0D64209ACBE900827E2D /* Number-collection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Number-collection.png"; sourceTree = "<group>"; };
+		4F7E0D66209AD19200827E2D /* ThreeBlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ThreeBlock.png; sourceTree = "<group>"; };
+		4F7E0D67209AD19300827E2D /* TwoBlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TwoBlock.png; sourceTree = "<group>"; };
+		4F7E0D68209AD19300827E2D /* ZeroBlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ZeroBlock.png; sourceTree = "<group>"; };
+		4F7E0D69209AD19300827E2D /* OneBlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OneBlock.png; sourceTree = "<group>"; };
 		4F81437A209455A00004F566 /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 		4F81437C209455CC0004F566 /* Attributions */ = {isa = PBXFileReference; lastKnownFileType = text; path = Attributions; sourceTree = "<group>"; };
 		4F81437E209458680004F566 /* sky.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sky.jpg; sourceTree = "<group>"; };
@@ -127,6 +135,10 @@
 				4F7E0D50209A9B7500827E2D /* GameModel.swift */,
 				4F814388209489CD0004F566 /* Vector.swift */,
 				4F71D062209452BE00A321AB /* Assets.xcassets */,
+				4F7E0D68209AD19300827E2D /* ZeroBlock.png */,
+				4F7E0D69209AD19300827E2D /* OneBlock.png */,
+				4F7E0D67209AD19300827E2D /* TwoBlock.png */,
+				4F7E0D66209AD19200827E2D /* ThreeBlock.png */,
 				4F7E0D64209ACBE900827E2D /* Number-collection.png */,
 				4F7E0D58209AAF1900827E2D /* life.png */,
 				4F7E0D56209AAB2600827E2D /* go-back.png */,
@@ -225,6 +237,7 @@
 				4F7E0D55209AA90B00827E2D /* unicorn-ending.jpg in Resources */,
 				4F7E0D4D209A9A6100827E2D /* narwhal.png in Resources */,
 				4F7E0D322099A63A00827E2D /* down-arrow.png in Resources */,
+				4F7E0D6A209AD19300827E2D /* ThreeBlock.png in Resources */,
 				4F7E0D3B2099ACE100827E2D /* cat_brown.png in Resources */,
 				4F81438320945E390004F566 /* whale-unicorn.png in Resources */,
 				4F7E0D65209ACBE900827E2D /* Number-collection.png in Resources */,
@@ -232,8 +245,11 @@
 				4F7E0D4B209A940500827E2D /* underwater-level.png in Resources */,
 				4F81437D209455CC0004F566 /* Attributions in Resources */,
 				4F71D066209452BE00A321AB /* LaunchScreen.storyboard in Resources */,
+				4F7E0D6B209AD19300827E2D /* TwoBlock.png in Resources */,
+				4F7E0D6C209AD19300827E2D /* ZeroBlock.png in Resources */,
 				4F7E0D3D2099AD1100827E2D /* cat_white.png in Resources */,
 				4F7E0D41209A69BB00827E2D /* LevelOneTitle.png in Resources */,
+				4F7E0D6D209AD19300827E2D /* OneBlock.png in Resources */,
 				4F7E0D49209A92A400827E2D /* LevelThreeTitle.png in Resources */,
 				4F7E0D61209ABC4E00827E2D /* YouLostTitle.png in Resources */,
 				4F814381209458F50004F566 /* unicorn-sky.jpg in Resources */,

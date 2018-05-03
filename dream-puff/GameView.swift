@@ -78,6 +78,10 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     
     private var _lifeTexture: GLKTextureInfo? = nil
     private var _scoreTexture: GLKTextureInfo? = nil
+    private var _scoreZeroBlockTexture: GLKTextureInfo? = nil
+    private var _scoreOneBlockTexture: GLKTextureInfo? = nil
+    private var _scoreTwoBlockTexture: GLKTextureInfo? = nil
+    private var _scoreThreeBlockTexture: GLKTextureInfo? = nil
     
     private var _lastUpdate: NSDate = NSDate()
     public var _gameTime = 0.0
@@ -218,6 +222,10 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         
         if let texture = _levelOneTexture {
             _titleSprite.texture = texture.name
+            _backgroundSprite.texture = _backgroundTextureLevelOne!.name
+            _scoreOneSprite.texture = _scoreZeroBlockTexture!.name
+            _scoreTwoSprite.texture = _scoreZeroBlockTexture!.name
+            _scoreThreeSprite.texture = _scoreZeroBlockTexture!.name
         }
     }
     
@@ -251,34 +259,35 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         lifeThreeSprite.position.x = 0.1
         lifeThreeSprite.position.y = -0.78
         
+        _scoreOneBlockTexture = try! GLKTextureLoader.texture(with: UIImage(named: "OneBlock")!.cgImage!, options: nil)
+        _scoreTwoBlockTexture = try! GLKTextureLoader.texture(with: UIImage(named: "TwoBlock")!.cgImage!, options: nil)
+        _scoreThreeBlockTexture = try! GLKTextureLoader.texture(with: UIImage(named: "ThreeBlock")!.cgImage!, options: nil)
+        _scoreZeroBlockTexture = try! GLKTextureLoader.texture(with: UIImage(named: "ZeroBlock")!.cgImage!, options: nil)
         _scoreTexture = try! GLKTextureLoader.texture(with: UIImage(named: "Number-collection")!.cgImage!, options: nil)
-        _scoreOneSprite.texture = _scoreTexture!.name
-        _scoreTwoSprite.texture = _scoreTexture!.name
-        _scoreThreeSprite.texture = _scoreTexture!.name
+        _scoreOneSprite.texture = _scoreZeroBlockTexture!.name
+        _scoreTwoSprite.texture = _scoreZeroBlockTexture!.name
+        _scoreThreeSprite.texture = _scoreZeroBlockTexture!.name
         
-        _scoreOneSprite.width = 0.20
-        _scoreOneSprite.height = 0.20
-        _scoreOneSprite.textureScale.x = 0.16
-        _scoreOneSprite.textureScale.y = 0.2
-        _scoreOneSprite.position.x = -0.16
+        _scoreOneSprite.width = 0.1
+        _scoreOneSprite.height = 0.1
+        _scoreOneSprite.textureScale.x = 1.0
+        _scoreOneSprite.textureScale.y = 1.0
+        _scoreOneSprite.position.x = -0.1
         _scoreOneSprite.position.y = 0.9
-        _scoreOneSprite.texturePosition.y = 0.18
         
-        _scoreTwoSprite.width = 0.20
-        _scoreTwoSprite.height = 0.20
-        _scoreTwoSprite.textureScale.x = 0.16
-        _scoreTwoSprite.textureScale.y = 0.2
-        _scoreTwoSprite.position.x = -0.06
+        _scoreTwoSprite.width = 0.1
+        _scoreTwoSprite.height = 0.1
+        _scoreTwoSprite.textureScale.x = 1.0
+        _scoreTwoSprite.textureScale.y = 1.0
+        _scoreTwoSprite.position.x = 0.0
         _scoreTwoSprite.position.y = 0.9
-        _scoreTwoSprite.texturePosition.y = 0.18
         
-        _scoreThreeSprite.width = 0.20
-        _scoreThreeSprite.height = 0.20
-        _scoreThreeSprite.textureScale.x = 0.16
-        _scoreThreeSprite.textureScale.y = 0.2
-        _scoreThreeSprite.position.x = 0.04
+        _scoreThreeSprite.width = 0.1
+        _scoreThreeSprite.height = 0.1
+        _scoreThreeSprite.textureScale.x = 1.0
+        _scoreThreeSprite.textureScale.y = 1.0
+        _scoreThreeSprite.position.x = 0.1
         _scoreThreeSprite.position.y = 0.9
-        _scoreThreeSprite.texturePosition.y = 0.18
         
         _levelOneTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelOneTitle")!.cgImage!, options: nil)
         _levelTwoTexture = try! GLKTextureLoader.texture(with: UIImage(named: "LevelTwoTitle")!.cgImage!, options: nil)
@@ -481,6 +490,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                             _titleSprite.texture = _levelTwoTexture!.name
                             _displayTitleTime = 5.0
                             _finishLevel = false
+                            _scoreOneSprite.texture = _scoreOneBlockTexture!.name
                         }
                     }
                 }
@@ -527,6 +537,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                             _titleSprite.texture = _levelThreeTexture!.name
                             _displayTitleTime = 5.0
                             _finishLevel = false
+                            _scoreOneSprite.texture = _scoreTwoBlockTexture!.name
                         }
                     }
                 }
@@ -548,18 +559,6 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         } else if (_isLevelThree == true) {
             var clearedEnemies = 0
             
-//            if (_bossGoLeft == true) {
-//                _bossSprite.position.x -= 0.01
-//                if (_bossSprite.position.x < -0.50) {
-//                    _bossGoLeft = false
-//                }
-//            } else {
-//                _bossSprite.position.x += 0.01
-//                if (_bossSprite.position.x > 0.50) {
-//                    _bossGoLeft = true
-//                }
-//            }
-            
             let newX = Float(cos(_gameTime * 0.25))
             if (newX < -0.3) {
                 _bossSprite.position.x = -0.3
@@ -577,11 +576,11 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             } else {
                 _bossSprite.position.y = newY
             }
-            let absX = abs(_bossSprite.position.x - _playerSprite.position.x)
-            let absY = abs(_bossSprite.position.y - _playerSprite.position.y)
+            let absX = abs(_playerSprite.position.x - _bossSprite.position.x)
+            let absY = abs(_playerSprite.position.y - _bossSprite.position.y)
             let xSquared = absX * absX
             let ySquared = absY * absY
-            let radius = (_playerSprite.width * 0.5) * (_playerSprite.width * 0.5)
+            let radius = (_bossSprite.width * 0.5) * (_bossSprite.width * 0.5)
             if ((xSquared + ySquared < radius)) {
                 // collision!!
                 _lives -= 1
@@ -612,6 +611,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                             _backgroundSprite.texture = _backgroundTextureLevelWinner!.name
                             _titleSprite.texture = _winnerTitleTexture!.name
                             _displayTitleTime = -1.0
+                            _scoreOneSprite.texture = _scoreThreeBlockTexture!.name
                         }
                     }
                 }
@@ -630,15 +630,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                     }
                 }
             }
-        } else if (_isLevelOne == false && _isLevelTwo == false && _isLevelThree == false) {
-            print("Game over")
         }
-        
-        
-//        _enemySprite.position.x = Float(cos(_animation))
-//        _enemySprite.position.y = Float(sin(_animation))
-//        _sprite.position.y += 0.005
-        
     }
     
     func animateSprites() {
@@ -717,6 +709,9 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         } else if ((_displayTitleTime == -1.0)) {
             _titleSprite.draw()
             _goBackSprite.draw()
+            _scoreOneSprite.draw()
+            _scoreTwoSprite.draw()
+            _scoreThreeSprite.draw()
         } else if (_isLevelOne == true) {
             _goBackSprite.draw()
             
