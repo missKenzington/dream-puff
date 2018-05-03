@@ -23,6 +23,9 @@
 		4F7E0D3B2099ACE100827E2D /* cat_brown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E0D382099ACE100827E2D /* cat_brown.png */; };
 		4F7E0D3D2099AD1100827E2D /* cat_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E0D3C2099AD1100827E2D /* cat_white.png */; };
 		4F7E0D41209A69BB00827E2D /* LevelOneTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E0D40209A69BA00827E2D /* LevelOneTitle.png */; };
+		4F7E0D43209A783600827E2D /* LevelTwoTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E0D42209A783600827E2D /* LevelTwoTitle.png */; };
+		4F7E0D45209A7A6700827E2D /* dark-sky.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E0D44209A7A6700827E2D /* dark-sky.jpg */; };
+		4F7E0D47209A8A3B00827E2D /* fly-bat.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E0D46209A8A3B00827E2D /* fly-bat.png */; };
 		4F81437B209455A00004F566 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F81437A209455A00004F566 /* MainMenuView.swift */; };
 		4F81437D209455CC0004F566 /* Attributions in Resources */ = {isa = PBXBuildFile; fileRef = 4F81437C209455CC0004F566 /* Attributions */; };
 		4F81437F209458680004F566 /* sky.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F81437E209458680004F566 /* sky.jpg */; };
@@ -52,6 +55,9 @@
 		4F7E0D382099ACE100827E2D /* cat_brown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cat_brown.png; sourceTree = "<group>"; };
 		4F7E0D3C2099AD1100827E2D /* cat_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cat_white.png; sourceTree = "<group>"; };
 		4F7E0D40209A69BA00827E2D /* LevelOneTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LevelOneTitle.png; sourceTree = "<group>"; };
+		4F7E0D42209A783600827E2D /* LevelTwoTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LevelTwoTitle.png; sourceTree = "<group>"; };
+		4F7E0D44209A7A6700827E2D /* dark-sky.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "dark-sky.jpg"; sourceTree = "<group>"; };
+		4F7E0D46209A8A3B00827E2D /* fly-bat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fly-bat.png"; sourceTree = "<group>"; };
 		4F81437A209455A00004F566 /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 		4F81437C209455CC0004F566 /* Attributions */ = {isa = PBXFileReference; lastKnownFileType = text; path = Attributions; sourceTree = "<group>"; };
 		4F81437E209458680004F566 /* sky.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sky.jpg; sourceTree = "<group>"; };
@@ -100,7 +106,9 @@
 				4F814386209489A20004F566 /* Sprite.swift */,
 				4F814388209489CD0004F566 /* Vector.swift */,
 				4F71D062209452BE00A321AB /* Assets.xcassets */,
+				4F7E0D44209A7A6700827E2D /* dark-sky.jpg */,
 				4F7E0D40209A69BA00827E2D /* LevelOneTitle.png */,
+				4F7E0D42209A783600827E2D /* LevelTwoTitle.png */,
 				4F7E0D2E2099A63900827E2D /* down-arrow.png */,
 				4F7E0D302099A63A00827E2D /* left-arrow.png */,
 				4F7E0D2F2099A63A00827E2D /* right-arrow.png */,
@@ -114,6 +122,7 @@
 				4F7E0D382099ACE100827E2D /* cat_brown.png */,
 				4F7E0D372099ACE100827E2D /* cat_orange.png */,
 				4F7E0D3C2099AD1100827E2D /* cat_white.png */,
+				4F7E0D46209A8A3B00827E2D /* fly-bat.png */,
 				4F814380209458F40004F566 /* unicorn-sky.jpg */,
 				4F71D064209452BE00A321AB /* LaunchScreen.storyboard */,
 				4F71D067209452BE00A321AB /* Info.plist */,
@@ -180,10 +189,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F7E0D3A2099ACE100827E2D /* cat_orange.png in Resources */,
+				4F7E0D45209A7A6700827E2D /* dark-sky.jpg in Resources */,
 				4F7E0D352099A63A00827E2D /* up-arrow.png in Resources */,
 				4F7E0D322099A63A00827E2D /* down-arrow.png in Resources */,
 				4F7E0D3B2099ACE100827E2D /* cat_brown.png in Resources */,
 				4F81438320945E390004F566 /* whale-unicorn.png in Resources */,
+				4F7E0D47209A8A3B00827E2D /* fly-bat.png in Resources */,
 				4F7E0D2D2099A29200827E2D /* background1.jpg in Resources */,
 				4F81437D209455CC0004F566 /* Attributions in Resources */,
 				4F71D066209452BE00A321AB /* LaunchScreen.storyboard in Resources */,
@@ -196,6 +207,7 @@
 				4F81437F209458680004F566 /* sky.jpg in Resources */,
 				4F7E0D342099A63A00827E2D /* left-arrow.png in Resources */,
 				4F6BAF7D20997B070088FD95 /* unicorn.png in Resources */,
+				4F7E0D43209A783600827E2D /* LevelTwoTitle.png in Resources */,
 				4F71D06E209452D700A321AB /* unicorn-splash.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
