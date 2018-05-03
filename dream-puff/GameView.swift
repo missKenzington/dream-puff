@@ -74,7 +74,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     private var _lifeTexture: GLKTextureInfo? = nil
     
     private var _lastUpdate: NSDate = NSDate()
-    private var _gameTime = 0.0
+    public var _gameTime = 0.0
     private var _animationSwitch = 0.0
     private var _displayTitleTime = 3.0
     private var _lives: Int = 3
@@ -94,6 +94,12 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     func resetGame() {
         _gameTime = 0.0
         _lives = 3
+        _lastUpdate = NSDate()
+        _isLevelOne = true
+        _isLevelTwo = false
+        _isLevelThree = false
+        _finishLevel = false
+        _bossGoLeft = true
         
         _goBackSprite.width = 0.1
         _goBackSprite.height = 0.1
@@ -203,7 +209,10 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         
         _animationSwitch = 1.0
         _displayTitleTime = 3.0
-        _titleSprite.texture = _levelOneTexture!.name
+        
+        if let texture = _levelOneTexture {
+            _titleSprite.texture = texture.name
+        }
     }
     
     
@@ -506,17 +515,45 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         } else if (_isLevelThree == true) {
             var clearedEnemies = 0
             
-            if (_bossGoLeft == true) {
-                _bossSprite.position.x -= 0.01
-                if (_bossSprite.position.x < -0.50) {
-                    _bossGoLeft = false
-                }
+//            if (_bossGoLeft == true) {
+//                _bossSprite.position.x -= 0.01
+//                if (_bossSprite.position.x < -0.50) {
+//                    _bossGoLeft = false
+//                }
+//            } else {
+//                _bossSprite.position.x += 0.01
+//                if (_bossSprite.position.x > 0.50) {
+//                    _bossGoLeft = true
+//                }
+//            }
+            
+            let newX = Float(cos(_gameTime * 0.25))
+            if (newX < -0.3) {
+                _bossSprite.position.x = -0.3
+            } else if (newX > 0.3) {
+                _bossSprite.position.x = 0.3
             } else {
-                _bossSprite.position.x += 0.01
-                if (_bossSprite.position.x > 0.50) {
-                    _bossGoLeft = true
-                }
+                _bossSprite.position.x = newX
             }
+            
+            let newY = Float(sin(_gameTime * 0.25))
+            if (newY < -0.8) {
+                _bossSprite.position.y = -0.8
+            } else if (newY > 0.8) {
+                _bossSprite.position.y = 0.8
+            } else {
+                _bossSprite.position.y = newY
+            }
+            let absX = abs(_bossSprite.position.x - _playerSprite.position.x)
+            let absY = abs(_bossSprite.position.y - _playerSprite.position.y)
+            let xSquared = absX * absX
+            let ySquared = absY * absY
+            let radius = (_playerSprite.width * 0.5) * (_playerSprite.width * 0.5)
+            if ((xSquared + ySquared < radius)) {
+                // collision!!
+                _lives -= 1
+            }
+            
             
             for enemy in _enemiesLevelThree {
                 if (enemy.dropTime > _gameTime) {

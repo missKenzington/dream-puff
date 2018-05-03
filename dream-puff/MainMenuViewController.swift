@@ -52,9 +52,7 @@ class MainMenuViewController: UIViewController, MainMenuDelegate, GameViewDelega
     }
     
     func newGame() {
-        if (introView.showResume == true) {
-            gameView.resetGame()
-        }
+        gameView.resetGame()
         self.navigationController?.pushViewController(gameView, animated: true)
     }
     
