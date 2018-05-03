@@ -28,7 +28,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     private let _leftArrowSprite: Sprite = Sprite()
     private let _rightArrowSprite: Sprite = Sprite()
     
-    private var _catTexture:  GLKTextureInfo? = nil
+    private var _unicornTexture:  GLKTextureInfo? = nil
     private var _whiteCatTexture: GLKTextureInfo? = nil
     private var _blackCatTexture: GLKTextureInfo? = nil
     private var _brownCatTexture: GLKTextureInfo? = nil
@@ -117,10 +117,10 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         _rightArrowSprite.textureScale.y = 1.0
         
         // setup sprite with a texture
-        _catTexture = try! GLKTextureLoader.texture(with: UIImage(named: "cat_white")!.cgImage!, options: nil)
-        _playerSprite.texture = _catTexture!.name
-        _playerSprite.height = 0.25
-        _playerSprite.width = 0.25
+        _unicornTexture = try! GLKTextureLoader.texture(with: UIImage(named: "unicorn")!.cgImage!, options: nil)
+        _playerSprite.texture = _unicornTexture!.name
+        _playerSprite.height = 0.20
+        _playerSprite.width = 0.20
         _playerSprite.position.x = 0.0
         _playerSprite.position.y = -0.3
         _playerSprite.textureScale.x = 0.33
@@ -156,6 +156,8 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             _enemiesLevelOne.append(sprite)
         }
         
+        dropTime = 35.0
+        
         for _ in 0...5 {
             let sprite = Sprite()
             sprite.texture = _batTexture!.name
@@ -163,9 +165,9 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             sprite.height = 0.25
             sprite.position.x = Random.random(min: -0.5, max: 0.5)
             sprite.position.y = 1.2
-            sprite.texturePosition.y = 0.5
+            sprite.texturePosition.y = 0.0
             sprite.textureScale.x = 0.33
-            sprite.textureScale.y = 0.25
+            sprite.textureScale.y = 0.5
             sprite.dropTime = dropTime
             dropTime += 2.0
             _enemiesLevelTwo.append(sprite)
@@ -183,29 +185,6 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         _gameTime += elapsed
         
         animateSprites()
-//
-//        // animate the sprites
-//        if (_gameTime >= _animationSwitch) {
-//            _animationSwitch = _gameTime + 0.33
-//
-//            if (_enemySprite.texturePosition.x == 0) {
-//                _enemySprite.texturePosition.x = 0.33
-//            } else if (_enemySprite.texturePosition.x == 0.33) {
-//                _enemySprite.texturePosition.x = 0.66
-//            } else {
-//                _enemySprite.texturePosition.x = 0.0
-//            }
-//
-//            if (_playerSprite.texturePosition.x == 0) {
-//                _playerSprite.texturePosition.x = 0.33
-//            } else if (_playerSprite.texturePosition.x == 0.33) {
-//                _playerSprite.texturePosition.x = 0.66
-//            } else {
-//                _playerSprite.texturePosition.x = 0.0
-//            }
-//        }
-        
-        
 
         if (_isLevelOne == true){
             var clearedEnemies = 0
@@ -234,6 +213,8 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                         _isLevelTwo = true
                         _backgroundSprite.texture = _backgroundTextureLevelTwo!.name
                         _titleSprite.texture = _levelTwoTexture!.name
+                        _displayTitleTime = 3.0
+                        _finishLevel = false
                     }
                 }
             }
@@ -250,13 +231,37 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
 //                    _isLevelTwo = true
 //                }
 //            }
+        } else if (_isLevelTwo == true) {
+            var clearedEnemies = 0
+            for enemy in _enemiesLevelTwo {
+                if (enemy.dropTime > _gameTime) {
+                    continue
+                }
+                if (_finishLevel == false) {
+                    enemy.position.y -= 0.01
+                    
+                    if (enemy.position.y < -1.0){
+                        enemy.position.x = Random.random(min: -0.5, max: 0.5)
+                        enemy.position.y = 1.2
+                    }
+                    if (_gameTime >  50.0) {
+                        _finishLevel = true
+                    }
+                } else {
+                    enemy.position.y -= 0.01
+                    
+                    if (enemy.position.y < -1.0) {
+                        clearedEnemies += 1
+                    }
+                    if (clearedEnemies == 10) {
+                        _isLevelOne = false
+                        _isLevelTwo = true
+                        _backgroundSprite.texture = _backgroundTextureLevelTwo!.name
+                        _titleSprite.texture = _levelTwoTexture!.name
+                    }
+                }
+            }
         }
-        
-        
-        
-//        _enemySprite.texturePosition.y += 0.25
-//        _enemySprite.texturePosition.y += 0.001
-//        _playerSprite.position.x += 0.001
         
 //        _enemySprite.position.x = Float(cos(_animation))
 //        _enemySprite.position.y = Float(sin(_animation))
@@ -266,8 +271,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
     
     func animateSprites() {
         if (_gameTime >= _animationSwitch) {
-            _animationSwitch = _gameTime + 0.33
-
+            
             if (_playerSprite.texturePosition.x == 0) {
                 _playerSprite.texturePosition.x = 0.33
             } else if (_playerSprite.texturePosition.x == 0.33) {
@@ -276,13 +280,32 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                 _playerSprite.texturePosition.x = 0.0
             }
             
-            for enemy in _enemiesLevelOne {
-                if (enemy.texturePosition.x == 0) {
-                    enemy.texturePosition.x = 0.33
-                } else if (enemy.texturePosition.x == 0.33) {
-                    enemy.texturePosition.x = 0.66
-                } else {
-                    enemy.texturePosition.x = 0.0
+            _animationSwitch = _gameTime + 0.33
+
+            if (_isLevelOne) {
+                for enemy in _enemiesLevelOne {
+                    if (enemy.texturePosition.x == 0) {
+                        enemy.texturePosition.x = 0.33
+                    } else if (enemy.texturePosition.x == 0.33) {
+                        enemy.texturePosition.x = 0.66
+                    } else {
+                        enemy.texturePosition.x = 0.0
+                    }
+                }
+            } else if (_isLevelTwo) {
+                for enemy in _enemiesLevelTwo {
+                    if (enemy.texturePosition.x == 0) {
+                        enemy.texturePosition.x = 0.33
+                    } else if (enemy.texturePosition.x == 0.33) {
+                        enemy.texturePosition.x = 0.66
+                    } else {
+                        enemy.texturePosition.x = 0.0
+                        if(enemy.texturePosition.y == 0.5) {
+                            enemy.texturePosition.y = 0.0
+                        } else {
+                            enemy.texturePosition.y = 0.5
+                        }
+                    }
                 }
             }
         }
@@ -304,7 +327,7 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
         if ((_displayTitleTime > 0.0)) {
             _displayTitleTime -= 0.1
             _titleSprite.draw()
-        } else {
+        } else if (_isLevelOne == true) {
             _upArrowSprite.draw()
             _downArrowSprite.draw()
             _leftArrowSprite.draw()
@@ -312,6 +335,16 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
             _playerSprite.draw()
             
             for enemy in _enemiesLevelOne {
+                enemy.draw()
+            }
+        } else if (_isLevelTwo == true) {
+            _upArrowSprite.draw()
+            _downArrowSprite.draw()
+            _leftArrowSprite.draw()
+            _rightArrowSprite.draw()
+            _playerSprite.draw()
+            
+            for enemy in _enemiesLevelTwo {
                 enemy.draw()
             }
         }
