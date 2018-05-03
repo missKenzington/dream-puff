@@ -440,11 +440,11 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                         }
                     }
                 }
-                var absX = abs(enemy.position.x - _playerSprite.position.x)
-                var absY = abs(enemy.position.y - _playerSprite.position.y)
-                var xSquared = absX * absX
-                var ySquared = absY * absY
-                var radius = (_playerSprite.width * 0.5) * (_playerSprite.width * 0.5)
+                let absX = abs(enemy.position.x - _playerSprite.position.x)
+                let absY = abs(enemy.position.y - _playerSprite.position.y)
+                let xSquared = absX * absX
+                let ySquared = absY * absY
+                let radius = (_playerSprite.width * 0.5) * (_playerSprite.width * 0.5)
                 if ((xSquared + ySquared < radius)) {
                     // collision!!
                     if (enemy.isDead == false) {
@@ -485,6 +485,21 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                             _displayTitleTime = 5.0
                             _finishLevel = false
                         }
+                    }
+                }
+                let absX = abs(enemy.position.x - _playerSprite.position.x)
+                let absY = abs(enemy.position.y - _playerSprite.position.y)
+                let xSquared = absX * absX
+                let ySquared = absY * absY
+                let radius = (_playerSprite.width * 0.5) * (_playerSprite.width * 0.5)
+                if ((xSquared + ySquared < radius)) {
+                    // collision!!
+                    if (enemy.isDead == false) {
+                        _lives -= 1
+                        enemy.isDead = true
+                        enemy.height = 0
+                        enemy.width = 0
+                        print("COLLISION")
                     }
                 }
             }
@@ -528,6 +543,21 @@ class GameView: GLKViewController, GLKViewControllerDelegate{
                             _titleSprite.texture = _winnerTitleTexture!.name
                             _displayTitleTime = -1.0
                         }
+                    }
+                }
+                let absX = abs(enemy.position.x - _playerSprite.position.x)
+                let absY = abs(enemy.position.y - _playerSprite.position.y)
+                let xSquared = absX * absX
+                let ySquared = absY * absY
+                let radius = (_playerSprite.width * 0.5) * (_playerSprite.width * 0.5)
+                if ((xSquared + ySquared < radius)) {
+                    // collision!!
+                    if (enemy.isDead == false) {
+                        _lives -= 1
+                        enemy.isDead = true
+                        enemy.height = 0
+                        enemy.width = 0
+                        print("COLLISION")
                     }
                 }
             }
